@@ -424,7 +424,7 @@ impl DatasheetDatabase {
         let normalized = Self::normalize_part_number(part_number);
         
         // Try prefix matching (e.g., "STM32F411" matches "STM32F411CEU6")
-        for (key, req) in &self.datasheets {
+        for (_key, req) in &self.datasheets {
             // Check if any part number in the datasheet starts with our query
             for pn in &req.part_numbers {
                 let pn_normalized = Self::normalize_part_number(pn);
@@ -435,7 +435,7 @@ impl DatasheetDatabase {
         }
         
         // Try substring matching for common patterns
-        for (key, req) in &self.datasheets {
+        for (_key, req) in &self.datasheets {
             for pn in &req.part_numbers {
                 let pn_normalized = Self::normalize_part_number(pn);
                 // Check for common IC naming patterns

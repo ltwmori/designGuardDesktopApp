@@ -1,3 +1,5 @@
+#![allow(dead_code)]
+
 use rusqlite::{Connection, Result as SqlResult, params};
 use serde::{Deserialize, Serialize};
 use std::path::Path;

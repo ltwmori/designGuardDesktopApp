@@ -129,8 +129,6 @@ impl DecouplingGroupsAnalyzer {
     ) -> Vec<DecouplingGroup> {
         // Convert Schematic to Circuit for unified analysis
         // This maintains backwards compatibility while using the unified implementation
-        use crate::ucs::adapters::KicadAdapter;
-        
         // Try to build circuit from schematic
         // Note: This is a simplified conversion - in practice, Circuit should come from state
         // For now, we fall back to the original implementation if conversion fails

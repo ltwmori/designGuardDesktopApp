@@ -468,7 +468,7 @@ Decoupling capacitors solve this by providing a local energy reservoir. The cap 
 }
 
 /// Create explanation for I2C pull-up resistor issues
-fn create_i2c_pullup_explanation(issue: &Issue) -> IssueExplanation {
+fn create_i2c_pullup_explanation(_issue: &Issue) -> IssueExplanation {
     IssueExplanation {
         what: "I2C bus detected but no pull-up resistors found. I2C is an open-drain bus that requires external pull-ups to function.".to_string(),
         why: WhySection {

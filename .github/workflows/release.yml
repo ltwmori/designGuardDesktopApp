@@ -28,6 +28,7 @@ jobs:
             artifact_name: designguard-linux
 
     runs-on: ${{ matrix.platform }}
+    environment: analytics
 
     steps:
       - name: Checkout
@@ -44,6 +45,10 @@ jobs:
 
       - name: Rust cache
         uses: Swatinem/rust-cache@v2
+
+      - name: Install x86_64 macOS target
+        if: matrix.platform == 'macos-latest' && contains(matrix.args, 'x86_64')
+        run: rustup target add x86_64-apple-darwin
 
       - name: Install Linux dependencies
         if: matrix.platform == 'ubuntu-22.04'

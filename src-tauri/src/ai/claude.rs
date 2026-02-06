@@ -374,6 +374,7 @@ struct ClaudeResponse {
 #[derive(Debug, Deserialize)]
 struct Content {
     #[serde(rename = "type")]
+    #[allow(dead_code)]
     content_type: Option<String>,
     text: String,
 }

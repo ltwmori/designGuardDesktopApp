@@ -3,17 +3,12 @@ use tauri::{State, Manager};
 use crate::state::{AppState, Settings};
 use crate::watcher::ProjectWatcher;
 use crate::parser::schema::Schematic;
-use crate::parser::pcb_schema::PcbDesign;
 use crate::parser::pcb::PcbParser;
+use crate::parser::netlist::NetlistBuilder;
 use crate::analyzer::rules::{Issue, RulesEngine, RuleContext};
-use crate::analyzer::capacitor_classifier::{CapacitorClassifier, CapacitorClassification};
-use crate::analyzer::decoupling_groups::{DecouplingGroupsAnalyzer, DecouplingGroup};
-use crate::compliance::power_net_registry::PowerNetRegistry;
-use crate::parser::netlist::{NetlistBuilder, PinNetConnection};
-use std::collections::HashMap;
 use crate::analyzer::explanations::DetailedIssue;
 use crate::analyzer::drs::{DRSAnalyzer, ICRiskScore, PathAnalysis, PathError};
-use crate::ai::claude::{ClaudeClient, AIAnalysis};
+use crate::ai::claude::AIAnalysis;
 use crate::ai::provider::{ProviderStatus, SchematicContext, ComponentDetail};
 use crate::datasheets::checker::DatasheetChecker;
 use crate::ucs::{
@@ -41,6 +36,7 @@ pub struct AnalysisResult {
 }
 
 /// Helper function to detect file format
+#[allow(dead_code)]
 fn detect_file_format(path: &Path) -> Result<bool, String> {
     let content = std::fs::read_to_string(path)
         .map_err(|e| format!("Failed to read file {}: {}", path.display(), e))?;
@@ -1139,7 +1135,6 @@ pub async fn upload_datasheet(
     app_handle: tauri::AppHandle,
 ) -> Result<String, String> {
     use crate::datasheets::builtin::load_datasheet_from_file;
-    use crate::datasheets::schema::DatasheetRequirements;
     use std::fs;
     
     // Get app data directory

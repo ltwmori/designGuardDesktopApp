@@ -3,8 +3,7 @@
 //! Reliably identifies Power Nets using keyword patterns and regulator output tracing.
 //! This is a critical prerequisite for capacitor classification.
 
-use crate::parser::schema::{Schematic, Component, Net};
-use crate::ai::classifier::ComponentRole;
+use crate::parser::schema::{Schematic, Component};
 use std::collections::HashMap;
 use serde::{Deserialize, Serialize};
 

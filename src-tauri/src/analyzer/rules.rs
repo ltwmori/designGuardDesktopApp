@@ -1,7 +1,7 @@
 use crate::parser::schema::*;
 use crate::analyzer::capacitor_classifier::{CapacitorClassification, CapacitorFunction};
 use crate::analyzer::decoupling_groups::DecouplingGroup;
-use crate::analyzer::drs::{DRSAnalyzer, ICRiskScore};
+use crate::analyzer::drs::DRSAnalyzer;
 use crate::compliance::power_net_registry::PowerNetRegistry;
 use serde::{Deserialize, Serialize};
 use std::sync::Arc;
@@ -169,7 +169,7 @@ fn parse_value(value: &str) -> Option<(f64, String)> {
         "mf" | "m" => "mF",
         "f" => "F",
         "k" | "kohm" | "kω" => "kΩ",
-        "m" | "mohm" | "mω" => "mΩ",
+        "mohm" | "mω" => "mΩ",
         "ohm" | "ω" | "r" => "Ω",
         _ => &unit,
     };
@@ -381,7 +381,7 @@ impl Rule for I2CPullResistorRule {
                 if component.reference.starts_with('R') || component.reference.starts_with('r') {
                     if let Some((value, unit)) = parse_value(&component.value) {
                         // Check for 2.2k to 10k
-                        if (unit == "kΩ" || unit == "k" || unit == "Ω") {
+                        if unit == "kΩ" || unit == "k" || unit == "Ω" {
                             let value_ohm = if unit == "kΩ" || unit == "k" {
                                 value * 1000.0
                             } else {
@@ -493,9 +493,9 @@ impl Rule for CrystalLoadCapacitorRule {
 impl BulkCapacitorRule {
     /// Calculate risk score for an IC using DRS (same as DecouplingCapacitorRule)
     fn calculate_risk_score_for_ic(
-        ic_ref: &str,
+        _ic_ref: &str,
         ic_value: &str,
-        pcb: &crate::parser::pcb_schema::PcbDesign,
+        _pcb: &crate::parser::pcb_schema::PcbDesign,
     ) -> Option<RiskScore> {
         let drs_analyzer = DRSAnalyzer::new();
         let max_inductance_nh = drs_analyzer.get_max_inductance(ic_value);
@@ -680,9 +680,9 @@ impl Rule for PowerPinRule {
 impl DecouplingCapacitorRule {
     /// Calculate risk score for an IC using DRS
     fn calculate_risk_score_for_ic(
-        ic_ref: &str,
+        _ic_ref: &str,
         ic_value: &str,
-        pcb: &crate::parser::pcb_schema::PcbDesign,
+        _pcb: &crate::parser::pcb_schema::PcbDesign,
     ) -> Option<RiskScore> {
         // Get max inductance limit
         let drs_analyzer = DRSAnalyzer::new();
@@ -883,7 +883,7 @@ impl Rule for BulkCapacitorRule {
                 if component.reference.starts_with('C') || component.reference.starts_with('c') {
                     if let Some((value, unit)) = parse_value(&component.value) {
                         // Check for 10uF to 100uF
-                        let value_uF = if unit == "uF" || unit == "µF" {
+                        let value_u_f = if unit == "uF" || unit == "µF" {
                             value
                         } else if unit == "nF" {
                             value / 1000.0
@@ -893,7 +893,7 @@ impl Rule for BulkCapacitorRule {
                             continue;
                         };
                         
-                        if value_uF >= 10.0 && value_uF <= 100.0 {
+                        if value_u_f >= 10.0 && value_u_f <= 100.0 {
                             if is_nearby(component, &regulator.position, 30.0) {
                                 found_bulk_cap = true;
                                 break;

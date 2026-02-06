@@ -307,6 +307,7 @@ impl NetlistBuilder {
     }
     
     /// Check if a point lies on a line segment (within tolerance)
+    #[allow(dead_code)]
     fn point_on_segment(point: &Position, start: &Position, end: &Position) -> bool {
         let dx = end.x - start.x;
         let dy = end.y - start.y;

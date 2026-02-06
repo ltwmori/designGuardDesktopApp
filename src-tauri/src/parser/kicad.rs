@@ -377,7 +377,7 @@ impl KicadParser {
         // This is simplified - real implementation needs geometric analysis
         // to determine which pins connect to which wires/labels
         for component in &schematic.components {
-            for pin in &component.pins {
+            for _pin in &component.pins {
                 // In a real implementation, we'd check if this pin's position
                 // intersects with any wire or label position
                 // For now, we'll create placeholder connections

@@ -48,8 +48,10 @@ pub enum EmiCategory {
 pub struct EmiAnalyzer {
     classifier: NetClassifier,
     /// Minimum gap size to consider (mm)
+    #[allow(dead_code)]
     min_gap_size: f64,
     /// Distance to check for reference plane (mm)
+    #[allow(dead_code)]
     plane_check_distance: f64,
 }
 

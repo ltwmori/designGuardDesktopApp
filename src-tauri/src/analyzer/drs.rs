@@ -13,7 +13,7 @@
 //! - W: Weighting factors based on net criticality
 
 use crate::parser::schema::{Schematic, Component, Position};
-use crate::parser::pcb_schema::{PcbDesign, Footprint, Pad, Via, Trace, Zone, Position3D};
+use crate::parser::pcb_schema::{PcbDesign, Footprint, Pad, Via, Zone, Position3D};
 use serde::{Deserialize, Serialize};
 use std::collections::{HashMap, HashSet, VecDeque};
 
@@ -113,6 +113,7 @@ enum GraphNode {
     ViaNode { 
         uuid: String, 
         position: Position3D, 
+        #[allow(dead_code)]
         layer: String 
     },
     ZoneNode { 
@@ -470,7 +471,7 @@ impl DRSAnalyzer {
         // Via inductance: ~0.3-0.5 nH per via (use 0.4 nH average)
         let via_inductance_nh = via_count as f64 * 0.4;
         // Total loop inductance (simplified: cap pad -> via -> trace -> IC pin)
-        let total_inductance_nh = trace_inductance_nh + via_inductance_nh;
+        let _total_inductance_nh = trace_inductance_nh + via_inductance_nh;
         
         // Get capacitor SRF
         let capacitor_srf_mhz = self.get_capacitor_srf(&capacitor.value);
@@ -616,7 +617,7 @@ impl DRSAnalyzer {
         // If no power pins found by name, try to find by net ID and check schematic nets
         if power_pins.is_empty() {
             for pad in &footprint.pads {
-                if let Some(net_id) = pad.net {
+                if let Some(_net_id) = pad.net {
                     // Find net in PCB by ID
                     for pcb_net in &schematic.nets {
                         // Check if this net is a power net
@@ -660,7 +661,7 @@ impl DRSAnalyzer {
     /// Build a map from component reference to PCB footprint
     fn build_footprint_map<'a>(
         &self,
-        schematic: &Schematic,
+        _schematic: &Schematic,
         pcb: &'a PcbDesign,
     ) -> HashMap<String, &'a Footprint> {
         let mut map = HashMap::new();
@@ -979,7 +980,7 @@ impl DRSAnalyzer {
         ic_ref: &str,
         net_name: &str,
         pcb: &PcbDesign,
-        schematic: &Schematic,
+        _schematic: &Schematic,
     ) -> Result<PathAnalysis, PathError> {
         // Find net ID by name
         let net_id = pcb.nets.iter()
@@ -1309,7 +1310,7 @@ impl DRSAnalyzer {
     fn reconstruct_path(
         &self,
         nodes: Vec<GraphNode>,
-        net_id: u32,
+        _net_id: u32,
         pcb: &PcbDesign,
     ) -> Result<Vec<PathSegment>, PathError> {
         let mut segments = Vec::new();
@@ -1323,7 +1324,7 @@ impl DRSAnalyzer {
                         position: position.clone(),
                     });
                 }
-                GraphNode::TraceEnd { uuid, position, layer } => {
+                GraphNode::TraceEnd { uuid, position: _, layer } => {
                     // Find the trace and add it as a segment
                     if let Some(trace) = pcb.traces.iter().find(|t| t.uuid == *uuid) {
                         // Only add trace once (when we encounter its start)
@@ -1338,7 +1339,7 @@ impl DRSAnalyzer {
                         }
                     }
                 }
-                GraphNode::ViaNode { uuid, position, layer } => {
+                GraphNode::ViaNode { uuid, position, layer: _ } => {
                     if let Some(via) = pcb.vias.iter().find(|v| v.uuid == *uuid) {
                         segments.push(PathSegment::Via {
                             uuid: uuid.clone(),

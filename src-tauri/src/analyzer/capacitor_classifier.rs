@@ -181,7 +181,7 @@ impl CapacitorClassifier {
     fn check_snubber(
         capacitor: &Component,
         nets: &[String],
-        value_pf: f64,
+        _value_pf: f64,
         schematic: &Schematic,
     ) -> Option<CapacitorClassification> {
         // Snubber: connected to switch node and GND, high voltage rating
@@ -229,7 +229,7 @@ impl CapacitorClassifier {
     fn check_filtering(
         capacitor: &Component,
         nets: &[String],
-        value_pf: f64,
+        _value_pf: f64,
         power_registry: &PowerNetRegistry,
         schematic: &Schematic,
     ) -> Option<CapacitorClassification> {

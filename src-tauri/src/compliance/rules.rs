@@ -287,7 +287,7 @@ impl CustomRulesEngine {
             RuleCheck::PowerTraceWidth { net_pattern, expected_current_a, temp_rise_c } => {
                 self.check_power_trace_width(pcb, rule, net_pattern, *expected_current_a, *temp_rise_c, settings)
             }
-            RuleCheck::DifferentialPairMatch { net_pattern_p, net_pattern_n, max_length_diff_mm, max_spacing_diff_mm } => {
+            RuleCheck::DifferentialPairMatch { net_pattern_p, net_pattern_n, max_length_diff_mm, max_spacing_diff_mm: _ } => {
                 self.check_differential_pair(pcb, rule, net_pattern_p, net_pattern_n, *max_length_diff_mm)
             }
             _ => Vec::new(), // Other checks not yet implemented
@@ -564,7 +564,7 @@ impl CustomRulesEngine {
         &self,
         pcb: &PcbDesign,
         rule: &CustomRule,
-        min_connections: u32,
+        _min_connections: u32,
     ) -> Vec<RuleViolation> {
         let mut violations = Vec::new();
         

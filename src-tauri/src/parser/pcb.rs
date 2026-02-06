@@ -591,7 +591,7 @@ impl PcbParser {
         // Parse filled polygons
         let mut filled_polygons = Vec::new();
         for fp_exp in sexp.get_all("filled_polygon") {
-            if let Some(fp_list) = fp_exp.as_list() {
+            if let Some(_fp_list) = fp_exp.as_list() {
                 let fp_layer = Self::get_string_value(fp_exp, "layer").unwrap_or_default();
                 if let Some(pts_exp) = fp_exp.get("pts") {
                     let points = Self::parse_pts(pts_exp);

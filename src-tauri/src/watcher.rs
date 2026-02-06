@@ -1,6 +1,6 @@
 use std::path::{Path, PathBuf};
 use anyhow::{Context, Result};
-use notify::{RecommendedWatcher, RecursiveMode, Watcher};
+use notify::{RecommendedWatcher, RecursiveMode};
 use notify_debouncer_mini::{new_debouncer, DebouncedEvent, Debouncer};
 use tokio::sync::broadcast;
 use tracing::{error, info, warn};
