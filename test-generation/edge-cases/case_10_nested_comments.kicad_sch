@@ -1,0 +1,23 @@
+(kicad_sch (version 20231120) (generator "eeschema") (generator_version "8.0")
+  (uuid "57796c3b-67ce-43da-9fd1-7fea202fccc7")
+  (paper "A4")
+  (lib_symbols)
+
+  ; Top level comment
+  (symbol (lib_id "Device:R") (at 100 100 0) (unit 1)
+    ; Comment inside symbol
+    (in_bom yes) (on_board yes) (dnp no)
+    (uuid "4a4500a8-b0a8-4a03-998f-58ceb6e2ce25")
+    (property "Reference" "R1" (at 101.6 98.53 0))
+    ; Comment with "quotes" and (parens)
+    (property "Value" "10k" (at 101.6 101.07 0))
+    (pin "1" (uuid "bf4155e0-9e9e-49d6-be4b-db6da31fde26"))
+    (pin "2" (uuid "c7069378-b31c-4fc9-98f5-b8118f9bc8f5"))
+  )
+  ; Another comment
+  ; Multi-line
+  ; comment block
+  (wire (pts (xy 90 50.8) (xy 98.33 50.8))
+    (uuid "a358a647-3c77-42e0-a253-407353ffb7a2")
+  )
+)

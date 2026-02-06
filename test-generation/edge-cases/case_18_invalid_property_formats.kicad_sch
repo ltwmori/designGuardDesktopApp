@@ -1,0 +1,17 @@
+(kicad_sch (version 20231120) (generator "eeschema") (generator_version "8.0")
+  (uuid "ec7d8f0b-6b88-45de-8caf-213ab153e64f")
+  (paper "A4")
+  (lib_symbols)
+
+  (symbol (lib_id "Device:R") (at 100 100 0) (unit 1)
+    (in_bom yes) (on_board yes) (dnp no)
+    (uuid "d711dea1-f0b1-4cb2-995c-2a9113f8115f")
+    ; Property with wrong number of arguments
+    (property "Reference" (at 101.6 98.53 0))
+    (property "Value" "10k" (at 101.6 101.07 0))
+    ; Property without quotes
+    (property Reference R1 (at 101.6 98.53 0))
+    (pin "1" (uuid "0f8053af-e050-43a7-8020-d0fea21661cd"))
+    (pin "2" (uuid "3cb391fb-7867-487a-a95c-70648c280dbb"))
+  )
+)

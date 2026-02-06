@@ -1,0 +1,78 @@
+{
+  "part_numbers": ["CP2102", "CP2102N", "CP2102-GM"],
+  "manufacturer": "Silicon Labs",
+  "category": "usb_interface",
+  "power_requirements": [
+    {
+      "pin_name": "VDD",
+      "voltage_min": 3.0,
+      "voltage_max": 3.6,
+      "voltage_typical": 3.3,
+      "current_max": 0.026
+    }
+  ],
+  "decoupling_requirements": [
+    {
+      "power_pin": "VDD",
+      "capacitance": { "min": 4.7e-6, "typical": 4.7e-6, "max": null },
+      "max_distance_mm": 5.0,
+      "capacitor_type": "ceramic",
+      "esr_requirement": null,
+      "capacitor_role": "bulk",
+      "severity": "warning",
+      "reason": "4.7µF bulk capacitor on VDD for stable operation."
+    },
+    {
+      "power_pin": "VDD",
+      "capacitance": { "min": 100e-9, "typical": 100e-9, "max": null },
+      "max_distance_mm": 3.0,
+      "capacitor_type": "ceramic",
+      "esr_requirement": null,
+      "capacitor_role": "bypass",
+      "severity": "warning",
+      "reason": "100nF bypass capacitor on VDD."
+    },
+    {
+      "power_pin": "REGIN",
+      "capacitance": { "min": 4.7e-6, "typical": 4.7e-6, "max": null },
+      "max_distance_mm": 5.0,
+      "capacitor_type": "ceramic",
+      "esr_requirement": null,
+      "capacitor_role": "bulk",
+      "severity": "warning",
+      "reason": "4.7µF on REGIN (regulator input from VBUS)."
+    }
+  ],
+  "external_components": [
+    {
+      "component_type": { "type": "protection_diode" },
+      "connected_pins": ["D+", "D-"],
+      "value_requirement": { "min": null, "typical": null, "max": null, "unit": "" },
+      "required": false,
+      "reason": "ESD protection TVS diodes recommended on USB data lines for production designs."
+    }
+  ],
+  "pin_requirements": [
+    {
+      "pin_name": "RST",
+      "requirement": { "type": "defined_state" },
+      "reason": "RST has internal pull-up. Can be left floating or connect to VDD. For external reset, use open-drain driver."
+    }
+  ],
+  "absolute_max_ratings": {
+    "vcc_max": 3.6,
+    "io_voltage_max": 5.8,
+    "io_current_max": null,
+    "storage_temp_min": -65.0,
+    "storage_temp_max": 150.0,
+    "operating_temp_min": -40.0,
+    "operating_temp_max": 85.0,
+    "esd_hbm": 4000.0
+  },
+  "warnings": [
+    "Internal oscillator - no external crystal needed",
+    "VBUS detection circuit recommended for proper USB enumeration",
+    "GPIO pins are 5V tolerant"
+  ],
+  "datasheet_url": "https://www.silabs.com/documents/public/data-sheets/CP2102-9.pdf"
+}

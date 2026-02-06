@@ -1,0 +1,43 @@
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+node_modules
+dist
+dist-ssr
+*.local
+
+# Editor directories and files
+.vscode/*
+!.vscode/extensions.json
+.idea
+.DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# Tauri
+src-tauri/target
+src-tauri/Cargo.lock
+
+# Environment files (may contain API keys)
+.env
+.env.local
+.env.*.local
+
+# Python virtual environment
+.venv
+
+# Generated icon output (re-generate with generate_icons.py)
+designguard_icons/
+
+# Icon generator and source SVGs (optional — remove if you want these in the repo)
+generate_icons.py
+public/*.svg

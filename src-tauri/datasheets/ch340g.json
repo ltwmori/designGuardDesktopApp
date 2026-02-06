@@ -1,0 +1,75 @@
+{
+  "part_numbers": ["CH340G", "CH340C", "CH340E", "CH340"],
+  "manufacturer": "WCH",
+  "category": "usb_interface",
+  "power_requirements": [
+    {
+      "pin_name": "VCC",
+      "voltage_min": 4.0,
+      "voltage_max": 5.5,
+      "voltage_typical": 5.0,
+      "current_max": 0.03
+    }
+  ],
+  "decoupling_requirements": [
+    {
+      "power_pin": "VCC",
+      "capacitance": { "min": 100e-9, "typical": 100e-9, "max": null },
+      "max_distance_mm": 5.0,
+      "capacitor_type": "ceramic",
+      "esr_requirement": null,
+      "capacitor_role": "bypass",
+      "severity": "warning",
+      "reason": "100nF decoupling on VCC pin."
+    },
+    {
+      "power_pin": "V3",
+      "capacitance": { "min": 100e-9, "typical": 100e-9, "max": null },
+      "max_distance_mm": 5.0,
+      "capacitor_type": "ceramic",
+      "esr_requirement": null,
+      "capacitor_role": "bypass",
+      "severity": "error",
+      "reason": "V3 is internal 3.3V regulator output. 100nF cap required for stability."
+    }
+  ],
+  "external_components": [
+    {
+      "component_type": {
+        "type": "crystal",
+        "frequency_hz": 12000000.0,
+        "load_capacitance_pf": 22.0
+      },
+      "connected_pins": ["XI", "XO"],
+      "value_requirement": { "min": 12000000.0, "typical": 12000000.0, "max": 12000000.0, "unit": "Hz" },
+      "required": true,
+      "reason": "12MHz crystal with 22pF load caps required for USB timing. CH340C has internal oscillator."
+    }
+  ],
+  "pin_requirements": [
+    {
+      "pin_name": "V3",
+      "requirement": {
+        "type": "cap_to_ground",
+        "capacitance": { "min": 100e-9, "typical": 100e-9, "max": null }
+      },
+      "reason": "V3 is internal 3.3V regulator output. Must have 100nF to GND. Do not connect external load."
+    }
+  ],
+  "absolute_max_ratings": {
+    "vcc_max": 5.5,
+    "io_voltage_max": 5.5,
+    "io_current_max": null,
+    "storage_temp_min": null,
+    "storage_temp_max": null,
+    "operating_temp_min": -40.0,
+    "operating_temp_max": 85.0,
+    "esd_hbm": null
+  },
+  "warnings": [
+    "V3 pin is regulator output - do not use as power supply",
+    "For auto-reset circuit, connect DTR to reset via 100nF cap",
+    "CH340C variant has internal crystal - no external crystal needed"
+  ],
+  "datasheet_url": "https://www.wch-ic.com/downloads/CH340DS1_PDF.html"
+}

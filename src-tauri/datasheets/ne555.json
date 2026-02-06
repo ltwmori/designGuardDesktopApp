@@ -1,0 +1,61 @@
+{
+  "part_numbers": ["NE555", "NE555P", "NE555N", "LM555", "TLC555", "ICM7555", "555"],
+  "manufacturer": "Various",
+  "category": "timer",
+  "power_requirements": [
+    {
+      "pin_name": "VCC",
+      "voltage_min": 4.5,
+      "voltage_max": 16.0,
+      "voltage_typical": 5.0,
+      "current_max": 0.015
+    }
+  ],
+  "decoupling_requirements": [
+    {
+      "power_pin": "VCC",
+      "capacitance": { "min": 100e-9, "typical": 100e-9, "max": null },
+      "max_distance_mm": 10.0,
+      "capacitor_type": "ceramic",
+      "esr_requirement": null,
+      "capacitor_role": "bypass",
+      "severity": "warning",
+      "reason": "10-100nF on VCC (pin 8), close to pin. Prevents supply glitches during output transitions."
+    }
+  ],
+  "external_components": [
+    {
+      "component_type": { "type": "filter_capacitor" },
+      "connected_pins": ["CTRL"],
+      "value_requirement": { "min": 10e-9, "typical": 10e-9, "max": null, "unit": "F" },
+      "required": true,
+      "reason": "10nF on CTRL (pin 5) to GND if not used for modulation. Prevents noise coupling."
+    }
+  ],
+  "pin_requirements": [
+    {
+      "pin_name": "CTRL",
+      "requirement": {
+        "type": "cap_to_ground",
+        "capacitance": { "min": 10e-9, "typical": 10e-9, "max": null }
+      },
+      "reason": "Control voltage pin (pin 5) should have 10nF to GND if unused. Prevents noise from affecting threshold."
+    }
+  ],
+  "absolute_max_ratings": {
+    "vcc_max": 18.0,
+    "io_voltage_max": null,
+    "io_current_max": 0.2,
+    "storage_temp_min": -65.0,
+    "storage_temp_max": 150.0,
+    "operating_temp_min": 0.0,
+    "operating_temp_max": 70.0,
+    "esd_hbm": null
+  },
+  "warnings": [
+    "Output can sink/source 200mA but gets hot - limit to 100mA for reliability",
+    "Bipolar 555 draws current spikes during switching - use decoupling",
+    "CMOS versions (TLC555, ICM7555) have lower power and higher frequency capability"
+  ],
+  "datasheet_url": "https://www.ti.com/lit/ds/symlink/ne555.pdf"
+}

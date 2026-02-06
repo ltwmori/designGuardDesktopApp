@@ -1,0 +1,171 @@
+{
+  "name": "Company Standard PCB Rules",
+  "version": "1.0.0",
+  "description": "Standard design rules for production PCBs - customize for your organization",
+  "author": "Engineering Team",
+  "settings": {
+    "copper_oz": 1.0,
+    "temp_rise_c": 10.0,
+    "unit": "mm"
+  },
+  "rules": [
+    {
+      "id": "MIN_TRACE_WIDTH",
+      "name": "Minimum Trace Width",
+      "description": "All traces must be at least 0.15mm wide for manufacturability",
+      "category": "Manufacturing",
+      "severity": "Error",
+      "check": {
+        "type": "MinTraceWidth",
+        "min_width_mm": 0.15,
+        "layer_filter": null,
+        "net_filter": null
+      },
+      "enabled": true
+    },
+    {
+      "id": "MIN_VIA_SIZE",
+      "name": "Minimum Via Size",
+      "description": "Vias must meet minimum size requirements for manufacturing",
+      "category": "Manufacturing",
+      "severity": "Error",
+      "check": {
+        "type": "MinViaSize",
+        "min_size_mm": 0.6,
+        "min_drill_mm": 0.3
+      },
+      "enabled": true
+    },
+    {
+      "id": "MIN_VIA_SPACING",
+      "name": "Minimum Via Spacing",
+      "description": "Vias must have adequate spacing for manufacturing",
+      "category": "Manufacturing",
+      "severity": "Error",
+      "check": {
+        "type": "MinViaSpacing",
+        "min_spacing_mm": 0.2
+      },
+      "enabled": true
+    },
+    {
+      "id": "MOUNTING_HOLES_GND",
+      "name": "Mounting Holes Grounded",
+      "description": "All mounting holes must be connected to ground for EMI shielding",
+      "category": "Safety",
+      "severity": "Warning",
+      "check": {
+        "type": "MountingHolesGrounded",
+        "min_connections": 1
+      },
+      "enabled": true
+    },
+    {
+      "id": "FIDUCIALS",
+      "name": "Assembly Fiducials",
+      "description": "Board must have at least 3 fiducials for automated assembly",
+      "category": "Manufacturing",
+      "severity": "Warning",
+      "check": {
+        "type": "RequireFiducials",
+        "min_count": 3
+      },
+      "enabled": true
+    },
+    {
+      "id": "USB_REF_PLANE",
+      "name": "USB Reference Plane",
+      "description": "USB signals require a continuous reference plane for impedance control",
+      "category": "Signal",
+      "severity": "Error",
+      "check": {
+        "type": "RequireReferencePlane",
+        "net_pattern": "USB"
+      },
+      "enabled": true
+    },
+    {
+      "id": "HDMI_REF_PLANE",
+      "name": "HDMI Reference Plane",
+      "description": "HDMI signals require a continuous reference plane",
+      "category": "Signal",
+      "severity": "Error",
+      "check": {
+        "type": "RequireReferencePlane",
+        "net_pattern": "HDMI"
+      },
+      "enabled": true
+    },
+    {
+      "id": "POWER_5V_WIDTH",
+      "name": "5V Power Trace Width",
+      "description": "5V power traces must handle 2A with 10°C temperature rise",
+      "category": "Power",
+      "severity": "Error",
+      "check": {
+        "type": "PowerTraceWidth",
+        "net_pattern": "5V",
+        "expected_current_a": 2.0,
+        "temp_rise_c": 10.0
+      },
+      "enabled": true
+    },
+    {
+      "id": "POWER_3V3_WIDTH",
+      "name": "3.3V Power Trace Width",
+      "description": "3.3V power traces must handle 1.5A with 10°C temperature rise",
+      "category": "Power",
+      "severity": "Error",
+      "check": {
+        "type": "PowerTraceWidth",
+        "net_pattern": "3V3",
+        "expected_current_a": 1.5,
+        "temp_rise_c": 10.0
+      },
+      "enabled": true
+    },
+    {
+      "id": "USB_DIFF_PAIR",
+      "name": "USB Differential Pair Matching",
+      "description": "USB D+/D- must be length matched within 0.5mm",
+      "category": "Signal",
+      "severity": "Warning",
+      "check": {
+        "type": "DifferentialPairMatch",
+        "net_pattern_p": "USB_D+",
+        "net_pattern_n": "USB_D-",
+        "max_length_diff_mm": 0.5,
+        "max_spacing_diff_mm": 0.1
+      },
+      "enabled": true
+    },
+    {
+      "id": "SIGNAL_TRACE_WIDTH",
+      "name": "Signal Trace Maximum Width",
+      "description": "Signal traces should not exceed 0.5mm to maintain impedance",
+      "category": "Signal",
+      "severity": "Info",
+      "check": {
+        "type": "MaxTraceWidth",
+        "max_width_mm": 0.5,
+        "layer_filter": null,
+        "net_filter": null
+      },
+      "enabled": false
+    },
+    {
+      "id": "REQUIRE_DECOUPLING",
+      "name": "Decoupling Capacitor Required",
+      "description": "All ICs should have nearby decoupling capacitors",
+      "category": "Power",
+      "severity": "Warning",
+      "check": {
+        "type": "RequireComponent",
+        "reference_pattern": "C",
+        "value_pattern": "100n",
+        "message": "Design should include 100nF decoupling capacitors"
+      },
+      "enabled": true
+    }
+  ]
+}

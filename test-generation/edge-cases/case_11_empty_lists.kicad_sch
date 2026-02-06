@@ -1,0 +1,17 @@
+(kicad_sch (version 20231120) (generator "eeschema") (generator_version "8.0")
+  (uuid "76ca76ce-2f0a-4b93-9390-2a9826023d48")
+  (paper "A4")
+  ; Empty lib_symbols
+  (lib_symbols)
+  ; Symbol with no pins
+  (symbol (lib_id "Device:R") (at 100 100 0) (unit 1)
+    (in_bom yes) (on_board yes) (dnp no)
+    (uuid "1e4d0b33-c86c-4819-b040-90da4ac5b7ac")
+    (property "Reference" "R1" (at 101.6 98.53 0))
+    (property "Value" "10k" (at 101.6 101.07 0))
+  )
+  ; Wire with empty point list (malformed but parseable)
+  (wire (pts)
+    (uuid "ec7a9133-fb81-4a24-b417-31fb663b4dce")
+  )
+)

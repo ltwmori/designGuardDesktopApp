@@ -1,0 +1,25 @@
+(kicad_sch (version 20231120) (generator "eeschema") (generator_version "8.0")
+  (uuid "2be5b2c5-43a9-4649-97d0-72d498060052")
+  (paper "A4")
+  (lib_symbols)
+
+  ; Symbol without lib_id
+  (symbol (at 100 100 0) (unit 1)
+    (in_bom yes) (on_board yes) (dnp no)
+    (uuid "06c8b788-3da0-4b84-bace-f9cdb085bcbd")
+    (property "Reference" "R1" (at 101.6 98.53 0))
+    (property "Value" "10k" (at 101.6 101.07 0))
+    (pin "1" (uuid "a39b8e01-d2f4-4ff0-85cf-aeb801bab222"))
+    (pin "2" (uuid "dbd1008f-97b9-4aba-9115-a7a882ba2de3"))
+  )
+  ; Component without Reference property
+  (symbol (lib_id "Device:C") (at 150 100 0) (unit 1)
+    (in_bom yes) (on_board yes) (dnp no)
+    (uuid "bc4ba83f-db0d-4a35-8930-5160f8825f8a")
+    (property "Value" "100nF" (at 151.6 101.07 0))
+    (pin "1" (uuid "7ac2b364-4ae3-4f3c-b736-2e86c22aa26b"))
+    (pin "2" (uuid "7d0d2105-8ad8-4396-bd14-b755549d29df"))
+  )
+  ; Wire without pts
+  (wire (uuid "73e11192-86f9-4a2a-8e87-abd293756fa4"))
+)

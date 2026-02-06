@@ -1,0 +1,58 @@
+{
+  "part_numbers": ["LM1117-3.3", "LM1117T-3.3", "LM1117MPX-3.3", "LM1117"],
+  "manufacturer": "Texas Instruments",
+  "category": "voltage_regulator",
+  "power_requirements": [
+    {
+      "pin_name": "VIN",
+      "voltage_min": 4.5,
+      "voltage_max": 15.0,
+      "voltage_typical": 5.0,
+      "current_max": 0.8
+    }
+  ],
+  "decoupling_requirements": [
+    {
+      "power_pin": "VIN",
+      "capacitance": { "min": 10e-6, "typical": 10e-6, "max": null },
+      "max_distance_mm": 10.0,
+      "capacitor_type": "ceramic",
+      "esr_requirement": null,
+      "capacitor_role": "bulk",
+      "severity": "warning",
+      "reason": "10µF minimum input capacitor for stability. Larger values improve transient response."
+    },
+    {
+      "power_pin": "VOUT",
+      "capacitance": { "min": 10e-6, "typical": 10e-6, "max": null },
+      "max_distance_mm": 10.0,
+      "capacitor_type": "ceramic",
+      "esr_requirement": {
+        "min_ohms": null,
+        "max_ohms": 0.5,
+        "reason": "Low ESR required for stability with ceramic caps. Tantalum also works."
+      },
+      "capacitor_role": "bulk",
+      "severity": "error",
+      "reason": "10µF minimum output capacitor required for stability. Low ESR ceramic or tantalum."
+    }
+  ],
+  "external_components": [],
+  "pin_requirements": [],
+  "absolute_max_ratings": {
+    "vcc_max": 15.0,
+    "io_voltage_max": null,
+    "io_current_max": null,
+    "storage_temp_min": null,
+    "storage_temp_max": null,
+    "operating_temp_min": -40.0,
+    "operating_temp_max": 125.0,
+    "esd_hbm": null
+  },
+  "warnings": [
+    "Dropout voltage is 1.1-1.3V - ensure VIN > VOUT + 1.3V",
+    "Calculate power dissipation: P = (VIN - VOUT) × IOUT",
+    "Add heatsink if P > 0.5W in SOT-223 package"
+  ],
+  "datasheet_url": "https://www.ti.com/lit/ds/symlink/lm1117.pdf"
+}

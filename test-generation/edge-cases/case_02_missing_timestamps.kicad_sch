@@ -1,0 +1,14 @@
+(kicad_sch (version 20231120)
+  (uuid "8ae860ee-4278-49d1-8935-120dc1511207")
+  (paper "A4")
+  (lib_symbols)
+  ; Missing generator and generator_version
+  (symbol (lib_id "Device:C") (at 100 100 0) (unit 1)
+    (in_bom yes) (on_board yes) (dnp no)
+    ; Missing uuid on symbol
+    (property "Reference" "C1" (at 101.6 98.53 0))
+    (property "Value" "100nF" (at 101.6 101.07 0))
+    (pin "1" (uuid "21d2c584-53d2-4198-9f3b-99f94fce1b6c"))
+    (pin "2" (uuid "d4cde3ef-bd9e-4f82-9f86-1f31348c30db"))
+  )
+)

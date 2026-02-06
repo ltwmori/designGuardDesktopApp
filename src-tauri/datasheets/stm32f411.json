@@ -1,0 +1,112 @@
+{
+  "part_numbers": ["STM32F411CEU6", "STM32F411CCU6", "STM32F411RET6", "STM32F411VET6", "STM32F411"],
+  "manufacturer": "STMicroelectronics",
+  "category": "microcontroller",
+  "power_requirements": [
+    {
+      "pin_name": "VDD",
+      "voltage_min": 1.7,
+      "voltage_max": 3.6,
+      "voltage_typical": 3.3,
+      "current_max": 0.1
+    },
+    {
+      "pin_name": "VDDA",
+      "voltage_min": 1.7,
+      "voltage_max": 3.6,
+      "voltage_typical": 3.3,
+      "current_max": 0.01
+    }
+  ],
+  "decoupling_requirements": [
+    {
+      "power_pin": "VDD",
+      "capacitance": { "min": 100e-9, "typical": 100e-9, "max": null },
+      "max_distance_mm": 5.0,
+      "capacitor_type": "ceramic",
+      "esr_requirement": null,
+      "capacitor_role": "bypass",
+      "severity": "warning",
+      "reason": "Each VDD pin requires 100nF ceramic capacitor within 5mm for high-frequency decoupling. STM32 has fast edge rates that create current spikes."
+    },
+    {
+      "power_pin": "VDD",
+      "capacitance": { "min": 4.7e-6, "typical": 10e-6, "max": 22e-6 },
+      "max_distance_mm": 20.0,
+      "capacitor_type": "ceramic",
+      "esr_requirement": null,
+      "capacitor_role": "bulk",
+      "severity": "warning",
+      "reason": "Bulk capacitor (4.7-10µF) required for energy storage during current transients. One bulk cap can serve multiple VDD pins."
+    },
+    {
+      "power_pin": "VDDA",
+      "capacitance": { "min": 1e-6, "typical": 1e-6, "max": null },
+      "max_distance_mm": 3.0,
+      "capacitor_type": "ceramic",
+      "esr_requirement": null,
+      "capacitor_role": "bypass",
+      "severity": "error",
+      "reason": "VDDA requires 1µF + 10nF for ADC/DAC accuracy. Missing caps cause noisy analog readings (±10-50 LSB error)."
+    },
+    {
+      "power_pin": "VDDA",
+      "capacitance": { "min": 10e-9, "typical": 10e-9, "max": null },
+      "max_distance_mm": 3.0,
+      "capacitor_type": "ceramic",
+      "esr_requirement": null,
+      "capacitor_role": "bypass",
+      "severity": "warning",
+      "reason": "Additional 10nF on VDDA for high-frequency noise filtering on analog supply."
+    }
+  ],
+  "external_components": [
+    {
+      "component_type": {
+        "type": "crystal",
+        "frequency_hz": 8000000.0,
+        "load_capacitance_pf": 20.0
+      },
+      "connected_pins": ["OSC_IN", "OSC_OUT"],
+      "value_requirement": {
+        "min": 4000000.0,
+        "typical": 8000000.0,
+        "max": 26000000.0,
+        "unit": "Hz"
+      },
+      "required": false,
+      "reason": "External crystal (HSE) optional but recommended for USB. Load caps typically 10-20pF. Calculate: CL = (C1*C2)/(C1+C2) + Cstray"
+    }
+  ],
+  "pin_requirements": [
+    {
+      "pin_name": "NRST",
+      "requirement": {
+        "type": "cap_to_ground",
+        "capacitance": { "min": 100e-9, "typical": 100e-9, "max": null }
+      },
+      "reason": "100nF cap on NRST filters noise and prevents spurious resets. Internal pull-up exists but external filtering recommended."
+    },
+    {
+      "pin_name": "BOOT0",
+      "requirement": { "type": "defined_state" },
+      "reason": "BOOT0 must be held low for normal boot from flash. Floating pin may cause unpredictable boot behavior. Use 10k pull-down or connect to GND."
+    }
+  ],
+  "absolute_max_ratings": {
+    "vcc_max": 4.0,
+    "io_voltage_max": 4.0,
+    "io_current_max": 0.025,
+    "storage_temp_min": -65.0,
+    "storage_temp_max": 150.0,
+    "operating_temp_min": -40.0,
+    "operating_temp_max": 85.0,
+    "esd_hbm": 2000.0
+  },
+  "warnings": [
+    "Ensure all VDD pins are connected even if using internal regulator",
+    "VBAT must be connected to VDD if backup domain not used",
+    "USB requires 48MHz clock - use HSE with PLL for accurate USB timing"
+  ],
+  "datasheet_url": "https://www.st.com/resource/en/datasheet/stm32f411ce.pdf"
+}

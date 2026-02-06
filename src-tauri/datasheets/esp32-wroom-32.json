@@ -1,0 +1,96 @@
+{
+  "part_numbers": ["ESP32-WROOM-32", "ESP32-WROOM-32D", "ESP32-WROOM-32E", "ESP32"],
+  "manufacturer": "Espressif",
+  "category": "wireless_module",
+  "power_requirements": [
+    {
+      "pin_name": "VDD",
+      "voltage_min": 3.0,
+      "voltage_max": 3.6,
+      "voltage_typical": 3.3,
+      "current_max": 0.5
+    }
+  ],
+  "decoupling_requirements": [
+    {
+      "power_pin": "VDD",
+      "capacitance": { "min": 10e-6, "typical": 10e-6, "max": null },
+      "max_distance_mm": 5.0,
+      "capacitor_type": "ceramic",
+      "esr_requirement": null,
+      "capacitor_role": "bulk",
+      "severity": "error",
+      "reason": "10µF bulk capacitor essential - ESP32 draws 500mA+ peaks during WiFi TX. Insufficient capacitance causes brownouts and resets."
+    },
+    {
+      "power_pin": "VDD",
+      "capacitance": { "min": 100e-9, "typical": 100e-9, "max": null },
+      "max_distance_mm": 3.0,
+      "capacitor_type": "ceramic",
+      "esr_requirement": null,
+      "capacitor_role": "bypass",
+      "severity": "warning",
+      "reason": "100nF bypass cap for high-frequency filtering close to power pins."
+    }
+  ],
+  "external_components": [
+    {
+      "component_type": { "type": "pull_up_resistor" },
+      "connected_pins": ["EN"],
+      "value_requirement": { "min": 10000.0, "typical": 10000.0, "max": null, "unit": "Ω" },
+      "required": true,
+      "reason": "EN pin requires 10k pull-up to VDD. Without it, module may not start reliably."
+    },
+    {
+      "component_type": { "type": "filter_capacitor" },
+      "connected_pins": ["EN"],
+      "value_requirement": { "min": 100e-9, "typical": 100e-9, "max": null, "unit": "F" },
+      "required": true,
+      "reason": "100nF cap on EN to GND creates RC delay for proper power-on sequencing. Prevents startup issues."
+    }
+  ],
+  "pin_requirements": [
+    {
+      "pin_name": "EN",
+      "requirement": { "type": "rc_delay", "r_ohms": 10000.0, "c_farads": 100e-9 },
+      "reason": "EN needs RC delay (10k + 100nF) for reliable startup. The delay ensures power is stable before chip enables."
+    },
+    {
+      "pin_name": "GPIO0",
+      "requirement": { "type": "defined_state" },
+      "reason": "GPIO0 is a strapping pin - must be HIGH at boot for normal operation, LOW for download mode. Add 10k pull-up."
+    },
+    {
+      "pin_name": "GPIO2",
+      "requirement": { "type": "defined_state" },
+      "reason": "GPIO2 must be LOW or floating at boot. If connected to external pull-up, boot may fail."
+    },
+    {
+      "pin_name": "GPIO12",
+      "requirement": { "type": "defined_state" },
+      "reason": "GPIO12 (MTDI) sets flash voltage at boot. Must be LOW for 3.3V flash (default). HIGH selects 1.8V."
+    },
+    {
+      "pin_name": "GPIO15",
+      "requirement": { "type": "defined_state" },
+      "reason": "GPIO15 (MTDO) controls debug output at boot. Pull-down silences boot messages on UART0."
+    }
+  ],
+  "absolute_max_ratings": {
+    "vcc_max": 3.6,
+    "io_voltage_max": 3.6,
+    "io_current_max": 0.012,
+    "storage_temp_min": null,
+    "storage_temp_max": null,
+    "operating_temp_min": -40.0,
+    "operating_temp_max": 85.0,
+    "esd_hbm": null
+  },
+  "warnings": [
+    "Keep antenna area clear of copper pour and components",
+    "Do not place ground plane under antenna",
+    "Strapping pins (GPIO0,2,12,15) must be in correct state at power-on",
+    "Power supply must handle 500mA peaks during WiFi transmission"
+  ],
+  "datasheet_url": "https://www.espressif.com/sites/default/files/documentation/esp32-wroom-32_datasheet_en.pdf"
+}

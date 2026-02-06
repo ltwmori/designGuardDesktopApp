@@ -1,0 +1,23 @@
+(kicad_sch (version 20231120) (generator "eeschema")
+  (uuid "corrupt-test"
+
+  ; This file is intentionally malformed:
+  ; - Missing closing parenthesis for uuid
+  ; - Incomplete symbol definition
+  ; - Malformed property
+
+  (symbol (lib_id "Device:R") (at 100 50
+    (uuid "broken-symbol"
+    (property "Reference" "R1"
+    (property "Value" (missing closing parens
+
+  ; Unmatched parentheses
+  (wire (pts (xy 10 20) (xy 30 40)
+    (uuid "broken-wire"
+  )
+
+  ; Random garbage that shouldn't be here
+  <<<CORRUPT DATA>>>
+  !!INVALID!!
+
+; File cut off abruptly without proper clo

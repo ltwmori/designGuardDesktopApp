@@ -1,0 +1,116 @@
+{
+  "part_numbers": ["RP2040", "RP2040-SC0914"],
+  "manufacturer": "Raspberry Pi",
+  "category": "microcontroller",
+  "power_requirements": [
+    {
+      "pin_name": "IOVDD",
+      "voltage_min": 1.8,
+      "voltage_max": 3.3,
+      "voltage_typical": 3.3,
+      "current_max": 0.01
+    },
+    {
+      "pin_name": "DVDD",
+      "voltage_min": 1.1,
+      "voltage_max": 1.1,
+      "voltage_typical": 1.1,
+      "current_max": 0.05
+    }
+  ],
+  "decoupling_requirements": [
+    {
+      "power_pin": "IOVDD",
+      "capacitance": { "min": 100e-9, "typical": 100e-9, "max": null },
+      "max_distance_mm": 5.0,
+      "capacitor_type": "ceramic",
+      "esr_requirement": null,
+      "capacitor_role": "bypass",
+      "severity": "warning",
+      "reason": "100nF on each IOVDD pin for I/O supply decoupling."
+    },
+    {
+      "power_pin": "DVDD",
+      "capacitance": { "min": 100e-9, "typical": 100e-9, "max": null },
+      "max_distance_mm": 3.0,
+      "capacitor_type": "ceramic",
+      "esr_requirement": null,
+      "capacitor_role": "bypass",
+      "severity": "error",
+      "reason": "100nF on DVDD (1.1V core supply) critical for stable operation."
+    },
+    {
+      "power_pin": "VREG_VIN",
+      "capacitance": { "min": 1e-6, "typical": 1e-6, "max": null },
+      "max_distance_mm": 5.0,
+      "capacitor_type": "ceramic",
+      "esr_requirement": null,
+      "capacitor_role": "bulk",
+      "severity": "error",
+      "reason": "1µF on VREG_VIN input for internal regulator stability."
+    },
+    {
+      "power_pin": "VREG_VOUT",
+      "capacitance": { "min": 1e-6, "typical": 1e-6, "max": null },
+      "max_distance_mm": 5.0,
+      "capacitor_type": "ceramic",
+      "esr_requirement": null,
+      "capacitor_role": "bulk",
+      "severity": "error",
+      "reason": "1µF on VREG_VOUT output for regulator stability. This supplies DVDD."
+    },
+    {
+      "power_pin": "USB_VDD",
+      "capacitance": { "min": 100e-9, "typical": 100e-9, "max": null },
+      "max_distance_mm": 5.0,
+      "capacitor_type": "ceramic",
+      "esr_requirement": null,
+      "capacitor_role": "bypass",
+      "severity": "warning",
+      "reason": "100nF on USB_VDD for USB PHY supply decoupling."
+    }
+  ],
+  "external_components": [
+    {
+      "component_type": {
+        "type": "crystal",
+        "frequency_hz": 12000000.0,
+        "load_capacitance_pf": 15.0
+      },
+      "connected_pins": ["XIN", "XOUT"],
+      "value_requirement": { "min": 12000000.0, "typical": 12000000.0, "max": 12000000.0, "unit": "Hz" },
+      "required": true,
+      "reason": "12MHz crystal required for USB. RP2040 has no internal oscillator accurate enough for USB."
+    },
+    {
+      "component_type": { "type": "series_termination_resistor" },
+      "connected_pins": ["USB_DP", "USB_DM"],
+      "value_requirement": { "min": 27.0, "typical": 27.0, "max": null, "unit": "Ω" },
+      "required": true,
+      "reason": "27Ω series resistors on USB D+/D- for impedance matching and EMI reduction."
+    }
+  ],
+  "pin_requirements": [
+    {
+      "pin_name": "RUN",
+      "requirement": { "type": "defined_state" },
+      "reason": "RUN pin enables the chip. Connect to 3.3V via 10k for normal operation, or add reset button to GND."
+    }
+  ],
+  "absolute_max_ratings": {
+    "vcc_max": 3.63,
+    "io_voltage_max": 3.63,
+    "io_current_max": 0.012,
+    "storage_temp_min": null,
+    "storage_temp_max": null,
+    "operating_temp_min": -20.0,
+    "operating_temp_max": 85.0,
+    "esd_hbm": null
+  },
+  "warnings": [
+    "External QSPI flash required - RP2040 has no internal flash",
+    "12MHz crystal mandatory for USB operation",
+    "DVDD must be powered from internal regulator or external 1.1V supply"
+  ],
+  "datasheet_url": "https://datasheets.raspberrypi.com/rp2040/rp2040-datasheet.pdf"
+}

@@ -1,0 +1,55 @@
+{
+  "part_numbers": ["LM7805", "L7805", "L7805CV", "MC7805", "7805"],
+  "manufacturer": "Various",
+  "category": "voltage_regulator",
+  "power_requirements": [
+    {
+      "pin_name": "VIN",
+      "voltage_min": 7.0,
+      "voltage_max": 25.0,
+      "voltage_typical": 9.0,
+      "current_max": 1.5
+    }
+  ],
+  "decoupling_requirements": [
+    {
+      "power_pin": "VIN",
+      "capacitance": { "min": 0.33e-6, "typical": 0.33e-6, "max": null },
+      "max_distance_mm": 15.0,
+      "capacitor_type": "ceramic",
+      "esr_requirement": null,
+      "capacitor_role": "bulk",
+      "severity": "warning",
+      "reason": "0.33µF minimum input capacitor. Required if regulator is far from main filter caps."
+    },
+    {
+      "power_pin": "VOUT",
+      "capacitance": { "min": 100e-9, "typical": 100e-9, "max": null },
+      "max_distance_mm": 15.0,
+      "capacitor_type": "ceramic",
+      "esr_requirement": null,
+      "capacitor_role": "bypass",
+      "severity": "warning",
+      "reason": "0.1µF minimum output capacitor improves transient response."
+    }
+  ],
+  "external_components": [],
+  "pin_requirements": [],
+  "absolute_max_ratings": {
+    "vcc_max": 35.0,
+    "io_voltage_max": null,
+    "io_current_max": null,
+    "storage_temp_min": null,
+    "storage_temp_max": null,
+    "operating_temp_min": 0.0,
+    "operating_temp_max": 125.0,
+    "esd_hbm": null
+  },
+  "warnings": [
+    "Dropout voltage is 2V - ensure VIN > 7V for 5V output",
+    "Calculate power dissipation: P = (VIN - 5V) × IOUT",
+    "Heatsink required if P > 1W. TO-220 can dissipate ~1W without heatsink.",
+    "For high current, consider switching regulator for efficiency"
+  ],
+  "datasheet_url": "https://www.ti.com/lit/ds/symlink/lm7805.pdf"
+}
