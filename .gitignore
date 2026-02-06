@@ -41,6 +41,9 @@ src-tauri/Cargo.lock
 # Generated icon output (re-generate with generate_icons.py)
 designguard_icons/
 
+# Release binaries (manual build output)
+release-binaries/
+
 # Icon generator and source SVGs (optional — remove if you want these in the repo)
 generate_icons.py
 public/*.svg
