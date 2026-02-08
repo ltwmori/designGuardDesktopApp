@@ -99,7 +99,8 @@ fn detect_modern_version(content: &str) -> Option<KicadVersion> {
     
     // Try to extract version number
     if let Some(version_start) = content.find("(version ") {
-        let version_section = &content[version_start..version_start.min(content.len()).saturating_add(50)];
+        let end = (version_start + 50).min(content.len());
+        let version_section = &content[version_start..end];
         if let Some(version_end) = version_section.find(')') {
             let version_str = &version_section[9..version_end].trim();
             if let Ok(version_num) = version_str.parse::<u32>() {

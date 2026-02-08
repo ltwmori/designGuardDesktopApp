@@ -460,12 +460,20 @@ Let me know if you have questions!"#;
 
     #[test]
     fn test_response_parsing_missing_fields() {
+        // AIAnalysis has #[serde(default)] on all fields, so partial JSON parses with defaults
         let incomplete_json = r#"{
             "summary": "Test"
         }"#;
 
         let analysis: Result<AIAnalysis, _> = serde_json::from_str(incomplete_json);
-        assert!(analysis.is_err(), "Should fail when required fields missing");
+        assert!(analysis.is_ok(), "Partial response should parse with defaults");
+
+        let analysis = analysis.unwrap();
+        assert_eq!(analysis.summary, "Test");
+        assert!(analysis.circuit_description.is_empty());
+        assert!(analysis.potential_issues.is_empty());
+        assert!(analysis.improvement_suggestions.is_empty());
+        assert!(analysis.component_recommendations.is_empty());
     }
 }
 
@@ -478,14 +486,14 @@ mod ai_client_tests {
 
     #[test]
     fn test_client_creation() {
-        let client = ClaudeClient::new("test-api-key".to_string());
+        let _client = ClaudeClient::new("test-api-key".to_string());
         // Client should be created successfully
         // We can't test internals, but we can verify it doesn't panic
     }
 
     #[test]
     fn test_client_with_custom_model() {
-        let client = ClaudeClient::new("test-api-key".to_string())
+        let _client = ClaudeClient::new("test-api-key".to_string())
             .with_model("claude-3-haiku-20240307".to_string());
         // Should accept custom model
     }
@@ -577,8 +585,6 @@ mod ai_client_tests {
 // =============================================================================
 
 mod json_extraction_tests {
-    use super::*;
-
     fn extract_json_from_text(text: &str) -> String {
         let text = text.trim();
 

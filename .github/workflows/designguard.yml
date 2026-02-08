@@ -1,0 +1,57 @@
+# DesignGuard validation in CI: report issues on KiCAD file changes.
+# Use notification mode (continue-on-error) or strict (fail on critical).
+
+name: DesignGuard Validation
+
+on:
+  push:
+    paths:
+      - '**.kicad_sch'
+      - '**.kicad_pcb'
+      - '**.sch'
+      - '**.brd'
+  pull_request:
+    paths:
+      - '**.kicad_sch'
+      - '**.kicad_pcb'
+      - '**.sch'
+      - '**.brd'
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install Rust
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: Build DesignGuard CLI
+        run: cargo build --release -p designguard-cli
+
+      - name: Run validation (notification mode)
+        run: |
+          ./target/release/designguard-cli project . \
+            --format github \
+            --fail-on high \
+            --no-ai
+        continue-on-error: true
+
+      - name: Run validation (strict, PR only)
+        if: github.event_name == 'pull_request'
+        run: |
+          ./target/release/designguard-cli project . \
+            --format json \
+            --fail-on critical \
+            --no-ai \
+            > validation-report.json
+        continue-on-error: true
+
+      - name: Upload validation report
+        if: always() && github.event_name == 'pull_request'
+        uses: actions/upload-artifact@v4
+        with:
+          name: validation-report
+          path: validation-report.json

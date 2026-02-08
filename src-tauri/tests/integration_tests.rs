@@ -12,9 +12,9 @@ use std::path::{Path, PathBuf};
 use designguard::analyzer::rules::{Issue, RulesEngine, Severity};
 use designguard::parser::kicad::KicadParser;
 use designguard::parser::schema::{
-    Component, Label, LabelType, Net, Pin, Position, Schematic, Wire,
+    Component, Label, LabelType, Position, Schematic, Wire,
 };
-use designguard::watcher::{ProjectWatcher, WatchEvent};
+use designguard_gui::watcher::{ProjectWatcher, WatchEvent};
 
 // =============================================================================
 // Test Helpers
@@ -327,7 +327,7 @@ mod file_watcher_tests {
 
     #[test]
     fn test_watcher_creation() {
-        let watcher = ProjectWatcher::new();
+        let _watcher = ProjectWatcher::new();
         // Watcher should be created successfully
     }
 
@@ -431,7 +431,7 @@ mod file_watcher_tests {
         fs::write(&schematic_path, modified_content).expect("Failed to modify file");
 
         // Wait for debounced event (watcher uses 500ms debounce)
-        let timeout = tokio::time::timeout(
+        let _timeout = tokio::time::timeout(
             Duration::from_secs(2),
             async {
                 loop {
@@ -630,7 +630,7 @@ mod performance_tests {
                 i,
                 i,
                 (i % 50) * 10 + 1,
-                (i / 50) * 10 - 1,
+                (i / 50) * 10,
                 (i % 50) * 10 + 1,
                 (i / 50) * 10 + 1,
                 i,
@@ -754,7 +754,7 @@ mod edge_case_tests {
         let issues = engine.analyze(&schematic);
 
         // Should work with negative coordinates
-        let u2_issues: Vec<_> = issues
+        let _u2_issues: Vec<_> = issues
             .iter()
             .filter(|i| i.component.as_ref() == Some(&"U2".to_string()))
             .collect();

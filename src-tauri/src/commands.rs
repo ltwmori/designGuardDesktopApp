@@ -2,17 +2,17 @@ use std::path::{Path, PathBuf};
 use tauri::{State, Manager};
 use crate::state::{AppState, Settings};
 use crate::watcher::ProjectWatcher;
-use crate::parser::schema::Schematic;
-use crate::parser::pcb::PcbParser;
-use crate::parser::netlist::NetlistBuilder;
-use crate::analyzer::rules::{Issue, RulesEngine, RuleContext};
-use crate::analyzer::explanations::DetailedIssue;
-use crate::analyzer::drs::{DRSAnalyzer, ICRiskScore, PathAnalysis, PathError};
-use crate::ai::claude::AIAnalysis;
-use crate::ai::provider::{ProviderStatus, SchematicContext, ComponentDetail};
-use crate::datasheets::checker::DatasheetChecker;
-use crate::ucs::{
-    UnifiedCircuitSchema, 
+use designguard::parser::schema::Schematic;
+use designguard::parser::pcb::PcbParser;
+use designguard::parser::netlist::NetlistBuilder;
+use designguard::analyzer::rules::{Issue, RulesEngine, RuleContext};
+use designguard::analyzer::explanations::DetailedIssue;
+use designguard::analyzer::drs::{DRSAnalyzer, ICRiskScore, PathAnalysis, PathError};
+use designguard::ai::claude::AIAnalysis;
+use designguard::ai::provider::{ProviderStatus, SchematicContext, ComponentDetail};
+use designguard::datasheets::checker::DatasheetChecker;
+use designguard::ucs::{
+    UnifiedCircuitSchema,
     adapters::{AdapterRegistry, KicadAdapter, CircuitAdapter},
     analysis::{self, AiCircuitSummary},
 };
@@ -137,7 +137,7 @@ pub async fn open_project(
     path: String,
     state: State<'_, AppState>,
 ) -> Result<ProjectInfo, String> {
-    use crate::parser::kicad::KicadParser;
+    use designguard::parser::kicad::KicadParser;
     
     let project_path = PathBuf::from(&path);
     
@@ -519,7 +519,7 @@ pub async fn open_project(
     
     // Parse PCB if available
     if let Some(ref pcb_path) = pcb_path {
-        use crate::parser::pcb::PcbParser;
+        use designguard::parser::pcb::PcbParser;
         match PcbParser::parse_pcb(pcb_path) {
             Ok(pcb) => {
                 let mut current_pcb = state.current_pcb.lock()
@@ -686,13 +686,13 @@ pub async fn analyze_design(
         };
         
         // Build netlist
-        let pin_to_net = crate::parser::netlist::NetlistBuilder::build_netlist(&schematic);
+        let pin_to_net = designguard::parser::netlist::NetlistBuilder::build_netlist(&schematic);
         
         // Build power net registry
-        let power_registry = crate::compliance::power_net_registry::PowerNetRegistry::new(&schematic);
+        let power_registry = designguard::compliance::power_net_registry::PowerNetRegistry::new(&schematic);
         
         // Classify capacitors
-        let classifications = crate::analyzer::capacitor_classifier::CapacitorClassifier::classify_capacitors(
+        let classifications = designguard::analyzer::capacitor_classifier::CapacitorClassifier::classify_capacitors(
             &schematic,
             &power_registry,
             &pin_to_net,
@@ -701,13 +701,13 @@ pub async fn analyze_design(
         // Build decoupling groups - use Circuit if available, otherwise fall back to Schematic
         let decoupling_groups = if let Some(ref circ) = circuit {
             // Use unified Circuit-based analysis
-            crate::analyzer::decoupling_groups::DecouplingGroupsAnalyzer::build_groups_from_circuit(
+            designguard::analyzer::decoupling_groups::DecouplingGroupsAnalyzer::build_groups_from_circuit(
                 circ,
                 &classifications,
             )
         } else {
             // Fall back to legacy Schematic-based analysis
-            crate::analyzer::decoupling_groups::DecouplingGroupsAnalyzer::build_groups(
+            designguard::analyzer::decoupling_groups::DecouplingGroupsAnalyzer::build_groups(
                 &schematic,
                 &power_registry,
                 &classifications,
@@ -837,7 +837,7 @@ pub async fn parse_schematic(
     schematic_path: String,
     _state: State<'_, AppState>,
 ) -> Result<Schematic, String> {
-    use crate::parser::kicad::KicadParser;
+    use designguard::parser::kicad::KicadParser;
     KicadParser::parse_schematic(Path::new(&schematic_path))
         .map_err(|e| e.to_string())
 }
@@ -861,7 +861,7 @@ pub async fn run_drc(
     schematic_path: String,
     _state: State<'_, AppState>,
 ) -> Result<Vec<Issue>, String> {
-    use crate::parser::kicad::KicadParser;
+    use designguard::parser::kicad::KicadParser;
     
     // Parse the schematic first
     let schematic = KicadParser::parse_schematic(Path::new(&schematic_path))
@@ -1001,7 +1001,7 @@ pub async fn configure_ollama(
 pub async fn list_ollama_models(
     url: Option<String>,
 ) -> Result<Vec<String>, String> {
-    use crate::ai::ollama::OllamaClient;
+    use designguard::ai::ollama::OllamaClient;
     
     let client = OllamaClient::new(url, None);
     client.list_models()
@@ -1113,7 +1113,7 @@ pub async fn configure_claude(
 /// Get list of supported ICs with datasheet information
 #[tauri::command]
 pub async fn get_supported_datasheets() -> Result<Vec<DatasheetInfo>, String> {
-    use crate::datasheets::builtin::get_all_datasheets;
+    use designguard::datasheets::builtin::get_all_datasheets;
     
     let datasheets = get_all_datasheets();
     let info: Vec<DatasheetInfo> = datasheets.iter().map(|ds| {
@@ -1134,7 +1134,7 @@ pub async fn upload_datasheet(
     file_path: String,
     app_handle: tauri::AppHandle,
 ) -> Result<String, String> {
-    use crate::datasheets::builtin::load_datasheet_from_file;
+    use designguard::datasheets::builtin::load_datasheet_from_file;
     use std::fs;
     
     // Get app data directory
@@ -1181,7 +1181,7 @@ pub async fn upload_datasheet(
 pub async fn get_user_datasheets(
     app_handle: tauri::AppHandle,
 ) -> Result<Vec<UserDatasheetInfo>, String> {
-    use crate::datasheets::builtin::load_datasheets_from_directory;
+    use designguard::datasheets::builtin::load_datasheets_from_directory;
     use std::fs;
     
     // Get app data directory
@@ -1208,7 +1208,7 @@ pub async fn get_user_datasheets(
             let path = entry.path();
             if path.extension().map(|e| e == "json").unwrap_or(false) {
                 if let Ok(content) = fs::read_to_string(&path) {
-                    if let Ok(ds) = serde_json::from_str::<crate::datasheets::schema::DatasheetRequirements>(&content) {
+                    if let Ok(ds) = serde_json::from_str::<designguard::datasheets::schema::DatasheetRequirements>(&content) {
                         let filename = path.file_name()
                             .and_then(|n| n.to_str())
                             .map(|s| s.to_string())
@@ -1381,7 +1381,7 @@ pub async fn get_circuit_ucs(
 #[tauri::command]
 pub async fn get_circuit_stats(
     state: State<'_, AppState>,
-) -> Result<crate::ucs::circuit::CircuitStats, String> {
+) -> Result<designguard::ucs::circuit::CircuitStats, String> {
     let circuit = {
         let current_circuit = state.current_circuit.lock()
             .map_err(|e| format!("Failed to lock current_circuit: {}", e))?;
@@ -1719,7 +1719,7 @@ pub async fn get_supported_formats() -> Result<Vec<String>, String> {
 // Component Role Classification Commands (Phi-3 via Ollama)
 // ============================================================================
 
-use crate::ai::{ComponentRoleClassifier, ComponentInput, ClassificationResult, ComponentRole};
+use designguard::ai::{ComponentRoleClassifier, ComponentInput, ClassificationResult, ComponentRole};
 
 /// Classify a single component's role using Phi-3
 #[tauri::command]
@@ -1967,7 +1967,7 @@ pub struct RoleInfo {
 // ============================================================================
 // PCB Compliance Commands - IPC-2221, EMI Analysis, Custom Rules
 // ============================================================================
-use crate::compliance::{
+use designguard::compliance::{
     ipc2221::{Ipc2221Calculator, CurrentCapacityReport, CurrentCapacityIssue, check_power_traces, generate_current_report},
     emi::{EmiIssue, EmiReport, generate_emi_report},
     net_classifier::{NetClassificationSummary, generate_classification_summary},
@@ -2263,7 +2263,7 @@ pub async fn run_pcb_compliance_audit(
     
     let total_issues = emi_report.total_issues + custom_violations.len();
     let critical_issues = emi_report.critical_count + 
-        custom_violations.iter().filter(|v| v.severity == crate::compliance::rules::RuleSeverity::Error).count();
+        custom_violations.iter().filter(|v| v.severity == designguard::compliance::rules::RuleSeverity::Error).count();
     
     Ok(ComplianceAuditReport {
         pcb_filename: pcb.filename.clone(),
@@ -2375,7 +2375,7 @@ pub async fn run_drs_analysis_from_files(
     schematic_path: String,
     pcb_path: String,
 ) -> Result<Vec<ICRiskScore>, String> {
-    use crate::parser::kicad::KicadParser;
+    use designguard::parser::kicad::KicadParser;
     
     // Parse schematic
     let schematic = KicadParser::parse_schematic(Path::new(&schematic_path))

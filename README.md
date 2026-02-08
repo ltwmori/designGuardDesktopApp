@@ -69,6 +69,67 @@ You can also use the **DRS**, **Compliance**, and **Circuit** tabs for decouplin
 
 ---
 
+## Using as a library
+
+DesignGuard’s validation engine is published as a Rust crate. Use it in your own tools or CI:
+
+```toml
+[dependencies]
+designguard = "0.1"
+```
+
+```rust
+use designguard::prelude::*;
+
+let result = DesignGuardCore::validate_schematic(
+    Path::new("design.kicad_sch"),
+    ValidationOptions::default(),
+)?;
+```
+
+See [designguard/README.md](designguard/README.md) and [docs.rs/designguard](https://docs.rs/designguard) for the full API.
+
+---
+
+## CLI mode
+
+The repo includes a CLI crate for scripts and CI. From the repo root:
+
+```bash
+cargo build --release -p designguard-cli
+./target/release/designguard-cli check design.kicad_sch
+```
+
+**Notification mode (report only):**
+
+```bash
+./target/release/designguard-cli check design.kicad_sch
+./target/release/designguard-cli project .
+```
+
+**Block on critical issues (e.g. in CI):**
+
+```bash
+./target/release/designguard-cli project . --fail-on critical --no-ai
+```
+
+**Output formats:** `--format human` (default), `--format json`, `--format github`, `--format gitlab`.
+
+**Options:** `--no-ai` (skip datasheet/AI), `--strict` (all rules), `--fail-on critical|high|medium|low|info`.
+
+**List rules:** `designguard rules --verbose`
+
+Example: skip gerber generation if validation fails:
+
+```bash
+designguard-cli check design.kicad_sch --fail-on high --no-ai || exit 1
+# then run kicad-cli export gerbers...
+```
+
+See `.github/workflows/designguard.yml` for CI and `scripts/pre-commit.example` for a pre-commit hook.
+
+---
+
 ## Building from Source
 
 ### Prerequisites

@@ -1455,7 +1455,7 @@ impl Default for DRSAnalyzer {
 mod tests {
     use super::*;
     use crate::parser::schema::{Schematic, Component, Position};
-    use crate::parser::pcb_schema::{PcbDesign, Footprint, Pad, Position3D, Size2D};
+    use crate::parser::pcb_schema::{PcbDesign, Footprint, Pad, Position3D, Size2D, Trace};
     use std::collections::HashMap;
     
     #[test]

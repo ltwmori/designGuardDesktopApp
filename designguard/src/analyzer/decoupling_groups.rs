@@ -12,7 +12,7 @@ use crate::compliance::power_net_registry::PowerNetRegistry;
 use crate::analyzer::capacitor_classifier::{CapacitorFunction, CapacitorClassification};
 use crate::parser::netlist::PinNetConnection;
 use crate::ucs::Circuit;
-use std::collections::HashMap;
+use std::collections::{HashMap, HashSet};
 use serde::{Deserialize, Serialize};
 
 /// Analysis of a capacitor in a decoupling group
@@ -74,9 +74,12 @@ impl DecouplingGroupsAnalyzer {
                 .map(|n| n.net_name.as_str())
                 .collect();
             
-            // For each power/gnd pair, find nearby capacitors
+            let mut seen_pairs: HashSet<(&str, &str)> = HashSet::new();
             for power_net in &power_nets {
                 for gnd_net in &gnd_nets {
+                    if !seen_pairs.insert((power_net, gnd_net)) {
+                        continue;
+                    }
                     let capacitors = Self::find_capacitors_for_nets_circuit(
                         circuit,
                         power_net,
@@ -87,32 +90,28 @@ impl DecouplingGroupsAnalyzer {
                         MAX_DISTANCE_MM,
                     );
                     
-                    if !capacitors.is_empty() {
-                        let has_hf_bypass = capacitors.iter().any(|c| c.is_hf_bypass);
-                        let has_bulk = capacitors.iter().any(|c| c.is_bulk);
-                        
-                        let hf_bypass_distance = capacitors
-                            .iter()
-                            .filter(|c| c.is_hf_bypass)
-                            .map(|c| c.distance_to_ic_mm)
-                            .fold(None, |acc, x| {
-                                match acc {
-                                    None => Some(x),
-                                    Some(y) => Some(if x < y { x } else { y }),
-                                }
-                            });
-                        
-                        groups.push(DecouplingGroup {
-                            ic_ref: ic.ref_des.clone(),
-                            ic_value: ic.value.clone().unwrap_or_default(),
-                            power_net: power_net.to_string(),
-                            gnd_net: gnd_net.to_string(),
-                            capacitors,
-                            has_hf_bypass,
-                            has_bulk,
-                            hf_bypass_distance_mm: hf_bypass_distance,
+                    let has_hf_bypass = capacitors.iter().any(|c| c.is_hf_bypass);
+                    let has_bulk = capacitors.iter().any(|c| c.is_bulk);
+                    let hf_bypass_distance = capacitors
+                        .iter()
+                        .filter(|c| c.is_hf_bypass)
+                        .map(|c| c.distance_to_ic_mm)
+                        .fold(None, |acc, x| {
+                            match acc {
+                                None => Some(x),
+                                Some(y) => Some(if x < y { x } else { y }),
+                            }
                         });
-                    }
+                    groups.push(DecouplingGroup {
+                        ic_ref: ic.ref_des.clone(),
+                        ic_value: ic.value.clone().unwrap_or_default(),
+                        power_net: power_net.to_string(),
+                        gnd_net: gnd_net.to_string(),
+                        capacitors,
+                        has_hf_bypass,
+                        has_bulk,
+                        hf_bypass_distance_mm: hf_bypass_distance,
+                    });
                 }
             }
         }
@@ -155,10 +154,12 @@ impl DecouplingGroupsAnalyzer {
             .collect();
         
         for ic in ics {
-            // Find power pins for this IC
             let power_pins = Self::find_power_pins(ic, pin_to_net, power_registry);
-            
+            let mut seen_pairs: HashSet<(String, String)> = HashSet::new();
             for (power_net, gnd_net) in power_pins {
+                if !seen_pairs.insert((power_net.clone(), gnd_net.clone())) {
+                    continue;
+                }
                 // Find capacitors connected to this power/gnd pair
                 let capacitors = Self::find_capacitors_for_nets(
                     &power_net,
@@ -175,32 +176,28 @@ impl DecouplingGroupsAnalyzer {
                     .filter(|cap| cap.distance_to_ic_mm <= 20.0)
                     .collect();
                 
-                if !nearby_caps.is_empty() {
-                    let has_hf_bypass = nearby_caps.iter().any(|c| c.is_hf_bypass);
-                    let has_bulk = nearby_caps.iter().any(|c| c.is_bulk);
-                    
-                    let hf_bypass_distance = nearby_caps
-                        .iter()
-                        .filter(|c| c.is_hf_bypass)
-                        .map(|c| c.distance_to_ic_mm)
-                        .fold(None, |acc, x| {
-                            match acc {
-                                None => Some(x),
-                                Some(y) => Some(if x < y { x } else { y }),
-                            }
-                        });
-                    
-                    groups.push(DecouplingGroup {
-                        ic_ref: ic.reference.clone(),
-                        ic_value: ic.value.clone(),
-                        power_net: power_net.clone(),
-                        gnd_net: gnd_net.clone(),
-                        capacitors: nearby_caps,
-                        has_hf_bypass,
-                        has_bulk,
-                        hf_bypass_distance_mm: hf_bypass_distance,
+                let has_hf_bypass = nearby_caps.iter().any(|c| c.is_hf_bypass);
+                let has_bulk = nearby_caps.iter().any(|c| c.is_bulk);
+                let hf_bypass_distance = nearby_caps
+                    .iter()
+                    .filter(|c| c.is_hf_bypass)
+                    .map(|c| c.distance_to_ic_mm)
+                    .fold(None, |acc, x| {
+                        match acc {
+                            None => Some(x),
+                            Some(y) => Some(if x < y { x } else { y }),
+                        }
                     });
-                }
+                groups.push(DecouplingGroup {
+                    ic_ref: ic.reference.clone(),
+                    ic_value: ic.value.clone(),
+                    power_net: power_net.clone(),
+                    gnd_net: gnd_net.clone(),
+                    capacitors: nearby_caps,
+                    has_hf_bypass,
+                    has_bulk,
+                    hf_bypass_distance_mm: hf_bypass_distance,
+                });
             }
         }
         
@@ -411,8 +408,9 @@ impl DecouplingGroupsAnalyzer {
         let is_hf_bypass = (value_nf >= 10.0 && value_uf <= 2.2) && 
                           function == CapacitorFunction::Decoupling;
         
-        // Bulk: >4.7µF, Bulk function
-        let is_bulk = value_uf > 4.7 && function == CapacitorFunction::Bulk;
+        // Bulk: >4.7µF; accept Bulk or Unknown (e.g. when classifier had no pin-to-net)
+        let is_bulk = value_uf > 4.7
+            && (function == CapacitorFunction::Bulk || function == CapacitorFunction::Unknown);
         
         (is_hf_bypass, is_bulk)
     }
@@ -443,8 +441,12 @@ mod tests {
         assert!(hf);
         assert!(!bulk);
         
-        // Bulk
+        // Bulk (explicit Bulk or Unknown when value > 4.7µF)
         let (hf, bulk) = DecouplingGroupsAnalyzer::classify_cap_type("10uF", CapacitorFunction::Bulk);
+        assert!(!hf);
+        assert!(bulk);
+
+        let (hf, bulk) = DecouplingGroupsAnalyzer::classify_cap_type("10uF", CapacitorFunction::Unknown);
         assert!(!hf);
         assert!(bulk);
     }

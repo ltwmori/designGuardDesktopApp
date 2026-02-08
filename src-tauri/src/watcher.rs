@@ -216,7 +216,6 @@ impl Drop for ProjectWatcher {
 mod tests {
     use super::*;
     use tempfile::TempDir;
-    use std::fs;
 
     #[tokio::test]
     async fn test_watcher_creation() {

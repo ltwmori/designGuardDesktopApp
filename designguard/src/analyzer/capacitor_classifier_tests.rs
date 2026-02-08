@@ -126,7 +126,7 @@ mod comprehensive_tests {
         schematic.components.push(cap);
         
         // Create pin-to-net mapping: C1 pin1 -> XTAL_IN, pin2 -> GND
-        let mut pin_to_net = create_pin_to_net("C1", "XTAL_IN", "GND");
+        let pin_to_net = create_pin_to_net("C1", "XTAL_IN", "GND");
         
         // Build power registry
         let power_registry = PowerNetRegistry::new(&schematic);
@@ -190,7 +190,7 @@ mod comprehensive_tests {
         schematic.components.push(connector);
         
         // Create pin-to-net mapping: C2 pin1 -> SIGNAL_IN, pin2 -> GND
-        let mut pin_to_net = create_pin_to_net("C2", "SIGNAL_IN", "GND");
+        let pin_to_net = create_pin_to_net("C2", "SIGNAL_IN", "GND");
         
         // Build power registry
         let power_registry = PowerNetRegistry::new(&schematic);
@@ -371,7 +371,7 @@ mod comprehensive_tests {
         schematic.components.push(cap);
         
         // Create pin-to-net mapping: C6 pin1 -> VCC, pin2 -> GND
-        let mut pin_to_net = create_pin_to_net("C6", "VCC", "GND");
+        let pin_to_net = create_pin_to_net("C6", "VCC", "GND");
         
         // Build power registry with VCC as power net
         let mut schematic_with_vcc = schematic.clone();
@@ -418,7 +418,7 @@ mod comprehensive_tests {
         schematic.components.push(cap);
         
         // Create pin-to-net mapping: C7 pin1 -> VCC, pin2 -> GND
-        let mut pin_to_net = create_pin_to_net("C7", "VCC", "GND");
+        let pin_to_net = create_pin_to_net("C7", "VCC", "GND");
         
         // Build power registry
         let mut schematic_with_vcc = schematic.clone();

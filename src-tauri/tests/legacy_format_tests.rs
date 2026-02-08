@@ -1,9 +1,7 @@
 //! Comprehensive test suite for KiCad legacy format parsing (versions 4-5)
 
-use std::path::PathBuf;
 use designguard::parser::kicad_legacy::LegacyParser;
 use designguard::parser::format_detector::{detect_format, KicadVersion};
-use designguard::parser::schema::Schematic;
 
 #[test]
 fn test_detect_legacy_schematic_v4() {

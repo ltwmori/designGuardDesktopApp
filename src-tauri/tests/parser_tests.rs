@@ -9,15 +9,12 @@
 //! - Full schematic parsing
 //! - Error handling for malformed files
 
-use std::collections::HashMap;
 use std::path::Path;
 
 // Import the library crate
 use designguard::parser::kicad::{KicadParser, KicadParseError};
-use designguard::parser::schema::{
-    Component, Label, LabelType, Net, Pin, Position, Schematic, Wire,
-};
-use designguard::parser::sexp::{ParseError, SExp, SExpParser};
+use designguard::parser::schema::LabelType;
+use designguard::parser::sexp::{SExp, SExpParser};
 
 // =============================================================================
 // S-Expression Parser Tests
@@ -126,7 +123,8 @@ mod sexp_tests {
 
     #[test]
     fn test_sexp_get() {
-        let mut parser = SExpParser::new("(key value other stuff)");
+        // get() expects nested lists: (key value) as a sublist
+        let mut parser = SExpParser::new("((key value) other stuff)");
         let sexp = parser.parse().unwrap();
         let value = sexp.get("key").unwrap();
         assert_eq!(value.as_atom(), Some("value"));
@@ -141,7 +139,8 @@ mod sexp_tests {
 
     #[test]
     fn test_sexp_get_all() {
-        let mut parser = SExpParser::new("(property name1 property name2 property name3)");
+        // get_all() expects nested lists: (property name) for each occurrence
+        let mut parser = SExpParser::new("((property name1) (property name2) (property name3))");
         let sexp = parser.parse().unwrap();
         let values = sexp.get_all("property");
         assert_eq!(values.len(), 3);

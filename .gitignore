@@ -13,7 +13,16 @@ dist-ssr
 *.local
 
 # Cursor IDE (agents, project config)
-.cursor/
+.cursor/*
+.cursor/rules/
+.cursor/skills/
+/.skillkit
+skillkit.yaml
+skillkit.yaml.lock
+.cursorrules
+.windsurfrules
+.AGENTS.md
+.trae/
 
 # Editor directories and files
 .vscode/*
@@ -26,7 +35,8 @@ dist-ssr
 *.sln
 *.sw?
 
-# Tauri
+# Rust (workspace and Tauri)
+target/
 src-tauri/target
 src-tauri/Cargo.lock
 

@@ -4,12 +4,12 @@ use std::sync::Mutex;
 use tokio::sync::RwLock;
 use crate::db::Database;
 use crate::watcher::ProjectWatcher;
-use crate::parser::schema::Schematic;
-use crate::parser::pcb_schema::PcbDesign;
-use crate::analyzer::rules::Issue;
-use crate::ai::router::AIRouter;
-use crate::ucs::Circuit;
-use crate::compliance::rules::CustomRulesEngine;
+use designguard::parser::schema::Schematic;
+use designguard::parser::pcb_schema::PcbDesign;
+use designguard::Issue;
+use designguard::ai::router::AIRouter;
+use designguard::ucs::Circuit;
+use designguard::compliance::rules::CustomRulesEngine;
 use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Clone, Serialize, Deserialize)]

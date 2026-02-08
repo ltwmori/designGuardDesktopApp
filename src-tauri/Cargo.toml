@@ -1,5 +1,5 @@
 [package]
-name = "designguard"
+name = "designguard-gui"
 version = "0.1.0"
 description = "DesignGuard - Desktop application for schematic design analysis"
 authors = ["you"]
@@ -7,10 +7,19 @@ license = ""
 repository = ""
 edition = "2021"
 
+[lib]
+name = "designguard_gui"
+path = "src/lib.rs"
+
+[[bin]]
+name = "designguard-gui"
+path = "src/main.rs"
+
 [build-dependencies]
 tauri-build = { version = "2.0", features = [] }
 
 [dependencies]
+designguard = { path = "../designguard" }
 tauri = { version = "2.0", features = [] }
 tauri-plugin-dialog = "2.0"
 tauri-plugin-fs = "2.0"
@@ -30,7 +39,6 @@ tracing = "0.1"
 tracing-subscriber = "0.3"
 async-trait = "0.1"
 futures = "0.3"
-# Graph database for circuit representation
 petgraph = { version = "0.6", features = ["serde-1"] }
 
 [dev-dependencies]

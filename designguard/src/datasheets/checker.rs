@@ -705,7 +705,7 @@ mod tests {
     fn test_checker_finds_missing_decoupling() {
         let checker = DatasheetChecker::new();
         
-        let mut schematic = Schematic {
+        let schematic = Schematic {
             uuid: "test".to_string(),
             filename: "test.kicad_sch".to_string(),
             version: None,

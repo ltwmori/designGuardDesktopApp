@@ -1,0 +1,21 @@
+(kicad_sch (version 20231120) (generator "eeschema")
+  (uuid "test-i2c-001")
+
+  (lib_symbols)
+
+  (symbol (lib_id "MCU_ST_STM32F1:STM32F103C8Tx") (at 100 100 0) (unit 1)
+    (uuid "ic-001")
+    (property "Reference" "U1" (at 100 95 0))
+    (property "Value" "STM32F103C8Tx" (at 100 105 0))
+    (pin "1" (uuid "pin-u1-1"))
+    (pin "2" (uuid "pin-u1-2"))
+  )
+
+  (global_label "SDA" (at 105 100 0)
+    (uuid "label-sda")
+  )
+
+  (global_label "SCL" (at 105 105 0)
+    (uuid "label-scl")
+  )
+)

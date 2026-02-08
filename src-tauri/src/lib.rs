@@ -4,15 +4,10 @@ use tracing_subscriber;
 mod commands;
 mod state;
 mod db;
-
-// Public modules for testing
 pub mod watcher;
-pub mod parser;
-pub mod analyzer;
-pub mod ai;
-pub mod datasheets;
-pub mod compliance;
-pub mod ucs;
+
+// Re-export validation types from library for commands
+pub use designguard::{Issue, Severity};
 
 use state::AppState;
 

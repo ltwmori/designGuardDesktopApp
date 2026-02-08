@@ -1,0 +1,32 @@
+#!/bin/bash
+# Pre-commit hook: run DesignGuard on staged KiCAD files.
+# Install: cp scripts/pre-commit.example .git/hooks/pre-commit && chmod +x .git/hooks/pre-commit
+#
+# Requires designguard-cli on PATH (e.g. cargo build -p designguard-cli and add target/release to PATH)
+# or set DESIGNGUARD to the full path to designguard-cli.
+
+set -e
+
+DESIGNGUARD="${DESIGNGUARD:-designguard-cli}"
+
+CHANGED_FILES=$(git diff --cached --name-only --diff-filter=ACM | grep -E '\.(kicad_sch|kicad_pcb|sch|brd)$') || true
+
+if [ -z "$CHANGED_FILES" ]; then
+  exit 0
+fi
+
+echo "Running DesignGuard validation..."
+
+for file in $CHANGED_FILES; do
+  if [ -f "$file" ]; then
+    "$DESIGNGUARD" check "$file" --fail-on critical --no-ai
+    if [ $? -ne 0 ]; then
+      echo "Validation failed for $file"
+      echo "Fix issues or use 'git commit --no-verify' to skip"
+      exit 1
+    fi
+  fi
+done
+
+echo "All files passed validation"
+exit 0

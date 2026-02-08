@@ -321,7 +321,8 @@ mod tests {
 
     #[test]
     fn test_get() {
-        let mut parser = SExpParser::new("(key value other stuff)");
+        // get() finds a sublist whose first element is the key and returns the second element
+        let mut parser = SExpParser::new("((key value) other stuff)");
         let sexp = parser.parse().unwrap();
         let value = sexp.get("key").unwrap();
         assert_eq!(value.as_atom(), Some("value"));

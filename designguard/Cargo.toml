@@ -1,0 +1,53 @@
+[package]
+name = "designguard"
+version = "0.1.0"
+edition = "2021"
+authors = ["DesignGuard Contributors"]
+license = "MIT"
+description = "KiCad schematic and PCB validation library"
+repository = "https://github.com/ltwmori/designGuardDesktopApp"
+documentation = "https://docs.rs/designguard"
+homepage = "https://design-guard-git-main-ltwmoris-projects.vercel.app/"
+keywords = ["kicad", "pcb", "validation", "electronics", "eda"]
+categories = ["hardware-support", "development-tools"]
+readme = "README.md"
+
+[lib]
+name = "designguard"
+path = "src/lib.rs"
+
+[features]
+default = []
+
+[dependencies]
+thiserror = "1"
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+petgraph = { version = "0.6", features = ["serde-1"] }
+tracing = "0.1"
+chrono = { version = "0.4", features = ["serde"] }
+uuid = { version = "1", features = ["v4"] }
+async-trait = "0.1"
+reqwest = { version = "0.11", features = ["json", "rustls-tls"] }
+tokio = { version = "1", features = ["full"] }
+anyhow = "1"
+
+[dev-dependencies]
+tempfile = "3.10"
+criterion = "0.5"
+
+[[bench]]
+name = "validation_bench"
+harness = false
+
+[[example]]
+name = "simple_validation"
+path = "examples/simple_validation.rs"
+
+[[example]]
+name = "custom_rules"
+path = "examples/custom_rules.rs"
+
+[package.metadata.docs.rs]
+all-features = true
+rustdoc-args = ["--cfg", "docsrs"]

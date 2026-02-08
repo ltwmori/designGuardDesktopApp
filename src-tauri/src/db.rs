@@ -5,8 +5,8 @@ use serde::{Deserialize, Serialize};
 use std::path::Path;
 use std::sync::Mutex;
 use crate::commands::{ProjectInfo, AnalysisResult};
-use crate::analyzer::rules::Issue;
-use crate::ai::claude::AIAnalysis;
+use designguard::Issue;
+use designguard::ai::claude::AIAnalysis;
 use thiserror::Error;
 
 #[derive(Debug, Error)]
@@ -516,7 +516,6 @@ impl<T> OptionalResult<T> for SqlResult<T> {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use std::fs;
     use tempfile::TempDir;
 
     fn create_test_db() -> (Database, TempDir) {
@@ -598,7 +597,7 @@ mod tests {
                 risk_score: None,
                 id: "1".to_string(),
                 rule_id: "test_rule".to_string(),
-                severity: crate::analyzer::rules::Severity::Warning,
+                severity: designguard::Severity::Warning,
                 message: "Test issue".to_string(),
                 component: None,
                 location: None,

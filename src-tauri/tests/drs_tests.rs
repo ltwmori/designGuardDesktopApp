@@ -479,7 +479,7 @@ fn test_ir_drop_calculation() {
     // Expected: 85mΩ (from user requirement)
     let expected_mohm = 85.0;
     let tolerance_percent = 5.0;
-    let tolerance_mohm = expected_mohm * tolerance_percent / 100.0;
+    let _tolerance_mohm = expected_mohm * tolerance_percent / 100.0;
     
     // Note: The calculated value (240mΩ) doesn't match expected (85mΩ)
     // This suggests the user might be using a different formula or assumptions
@@ -672,7 +672,7 @@ fn test_inductance_calculation_formula() {
     
     let expected_trace_inductance = trace_length_mm * 1.0; // 1 nH/mm
     let expected_via_inductance = via_count as f64 * 0.4; // 0.4 nH per via
-    let expected_total = expected_trace_inductance + expected_via_inductance;
+    let _expected_total = expected_trace_inductance + expected_via_inductance;
     
     // Create test scenario
     let mut pcb = create_test_pcb();

@@ -1,0 +1,103 @@
+{
+  "part_numbers": ["ATmega328P", "ATmega328P-PU", "ATmega328P-AU", "ATMEGA328P", "ATmega328"],
+  "manufacturer": "Microchip/Atmel",
+  "category": "microcontroller",
+  "power_requirements": [
+    {
+      "pin_name": "VCC",
+      "voltage_min": 1.8,
+      "voltage_max": 5.5,
+      "voltage_typical": 5.0,
+      "current_max": 0.2
+    },
+    {
+      "pin_name": "AVCC",
+      "voltage_min": 1.8,
+      "voltage_max": 5.5,
+      "voltage_typical": 5.0,
+      "current_max": 0.01
+    }
+  ],
+  "decoupling_requirements": [
+    {
+      "power_pin": "VCC",
+      "capacitance": { "min": 100e-9, "typical": 100e-9, "max": null },
+      "max_distance_mm": 10.0,
+      "capacitor_type": "ceramic",
+      "esr_requirement": null,
+      "capacitor_role": "bypass",
+      "severity": "warning",
+      "reason": "100nF ceramic capacitor on VCC for digital supply decoupling."
+    },
+    {
+      "power_pin": "AVCC",
+      "capacitance": { "min": 100e-9, "typical": 100e-9, "max": null },
+      "max_distance_mm": 10.0,
+      "capacitor_type": "ceramic",
+      "esr_requirement": null,
+      "capacitor_role": "bypass",
+      "severity": "warning",
+      "reason": "100nF on AVCC required even if ADC not used. AVCC powers port drivers."
+    }
+  ],
+  "external_components": [
+    {
+      "component_type": {
+        "type": "crystal",
+        "frequency_hz": 16000000.0,
+        "load_capacitance_pf": 22.0
+      },
+      "connected_pins": ["XTAL1", "XTAL2"],
+      "value_requirement": { "min": null, "typical": 16000000.0, "max": 20000000.0, "unit": "Hz" },
+      "required": false,
+      "reason": "External crystal optional - internal 8MHz RC oscillator available. For precise timing, use 16MHz crystal with 22pF load caps."
+    },
+    {
+      "component_type": { "type": "pull_up_resistor" },
+      "connected_pins": ["RESET"],
+      "value_requirement": { "min": 10000.0, "typical": 10000.0, "max": null, "unit": "Ω" },
+      "required": true,
+      "reason": "10k pull-up on RESET prevents spurious resets from noise. Internal pull-up is weak (~50k)."
+    },
+    {
+      "component_type": { "type": "reset_capacitor" },
+      "connected_pins": ["RESET"],
+      "value_requirement": { "min": 100e-9, "typical": 100e-9, "max": null, "unit": "F" },
+      "required": false,
+      "reason": "Optional 100nF cap on RESET for noise filtering. Required if long reset traces."
+    },
+    {
+      "component_type": { "type": "filter_capacitor" },
+      "connected_pins": ["AREF"],
+      "value_requirement": { "min": 100e-9, "typical": 100e-9, "max": null, "unit": "F" },
+      "required": false,
+      "reason": "100nF on AREF if using ADC with external reference. Filters reference noise."
+    }
+  ],
+  "pin_requirements": [
+    {
+      "pin_name": "RESET",
+      "requirement": {
+        "type": "pull_up",
+        "resistance_ohms": { "min": 10000.0, "typical": 10000.0, "max": null, "unit": "Ω" }
+      },
+      "reason": "RESET needs external 10k pull-up for noise immunity. Internal pull-up alone is insufficient in noisy environments."
+    }
+  ],
+  "absolute_max_ratings": {
+    "vcc_max": 6.0,
+    "io_voltage_max": 5.5,
+    "io_current_max": 0.040,
+    "storage_temp_min": -65.0,
+    "storage_temp_max": 150.0,
+    "operating_temp_min": -40.0,
+    "operating_temp_max": 85.0,
+    "esd_hbm": null
+  },
+  "warnings": [
+    "AVCC must be connected even if ADC is not used",
+    "Connect unused analog inputs to GND to reduce noise",
+    "Total current through VCC/GND must not exceed 200mA"
+  ],
+  "datasheet_url": "https://ww1.microchip.com/downloads/en/DeviceDoc/ATmega328P-Complete-Datasheet-40001984A.pdf"
+}

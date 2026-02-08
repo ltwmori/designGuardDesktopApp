@@ -13,11 +13,11 @@ use std::collections::HashMap;
 
 use designguard::analyzer::rules::{
     BulkCapacitorRule, CrystalLoadCapacitorRule, DecouplingCapacitorRule,
-    ESDProtectionRule, I2CPullResistorRule, Issue, PowerPinRule, Rule,
+    ESDProtectionRule, I2CPullResistorRule, PowerPinRule, Rule,
     RulesEngine, Severity,
 };
 use designguard::parser::schema::{
-    Component, Label, LabelType, Net, Pin, Position, Schematic, Wire,
+    Component, Label, LabelType, Position, Schematic,
 };
 
 // =============================================================================
@@ -509,7 +509,7 @@ mod crystal_caps_tests {
         let mut schematic = create_empty_schematic();
 
         // Add a crystal detected by value (not reference)
-        let mut crystal = create_component(
+        let crystal = create_component(
             "X1", // Different reference
             "16MHz Crystal",
             "Device:Crystal",
