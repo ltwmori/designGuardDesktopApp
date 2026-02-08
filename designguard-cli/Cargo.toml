@@ -8,7 +8,7 @@ license = "MIT"
 repository = "https://github.com/ltwmori/designGuardDesktopApp"
 
 [dependencies]
-designguard = { path = "../designguard" }
+designguard = { version = "0.1", path = "../designguard" }
 clap = { version = "4.5", features = ["derive"] }
 serde_json = "1"
 
