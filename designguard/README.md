@@ -82,7 +82,8 @@ See the [`examples/`](examples/) directory:
 
 ## Documentation
 
-Full API: [docs.rs/designguard](https://docs.rs/designguard)
+- **API docs (when published):** [docs.rs/designguard](https://docs.rs/designguard). If the crate was just published, docs.rs may take a few minutes to build; you can [request a rebuild](https://docs.rs/crate/designguard) if needed.
+- **Build docs locally:** From the repo root run `cargo doc --no-deps -p designguard --open` to build and open the API docs (same as [docs.rs](https://docs.rs/about/builds)).
 
 ## License
 

@@ -48,6 +48,9 @@ path = "examples/simple_validation.rs"
 name = "custom_rules"
 path = "examples/custom_rules.rs"
 
+# docs.rs: build with default features only so dependency optional features
+# (e.g. native TLS) do not break the doc build. See https://docs.rs/about/metadata
 [package.metadata.docs.rs]
-all-features = true
+all-features = false
 rustdoc-args = ["--cfg", "docsrs"]
+targets = ["x86_64-unknown-linux-gnu"]

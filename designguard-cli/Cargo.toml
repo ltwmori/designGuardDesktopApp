@@ -6,6 +6,7 @@ description = "CLI for KiCad schematic and PCB validation (DesignGuard)"
 authors = ["DesignGuard Contributors"]
 license = "MIT"
 repository = "https://github.com/ltwmori/designGuardDesktopApp"
+readme = "README.md"
 
 [dependencies]
 designguard = { version = "0.1", path = "../designguard" }
