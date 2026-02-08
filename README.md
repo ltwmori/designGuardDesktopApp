@@ -1,10 +1,15 @@
 # DesignGuard
 
+[![lib](https://img.shields.io/crates/v/designguard?label=lib)](https://crates.io/crates/designguard)
+[![cli](https://img.shields.io/crates/v/designguard-cli?label=cli)](https://crates.io/crates/designguard-cli)
+
 Pre-flight checks for KiCAD PCB designs. Catch electrical errors before manufacturing.
 
 DesignGuard is a desktop app that analyzes your KiCad schematics and PCB layouts, flags potential issues, and explains what to fix. Think of it as a spell-checker for hardware design: it catches missing decoupling caps, I2C without pull-ups, undersized traces, and dozens of other mistakes before they become expensive manufacturing re-spins.
 
 ![DesignGuard screenshot](assets/screenshot.png)
+
+![DesignGuard DRS and AI Assistant](assets/screenshot-drs.png)
 
 ---
 
